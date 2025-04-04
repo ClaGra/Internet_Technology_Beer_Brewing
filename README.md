@@ -1,10 +1,6 @@
-# Pizzeria Reference Project (PizzaRP)
-
-This is a minimal Pizzeria Reference Project (PizzaRP) as a template for students. 
+# Internet_Technology_Project
 
 [![License](https://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-
-> 🚧: **This is a template project**: Make sure you adapt this documentation and the source code in this project according to your needs and use case. Comments are provided with "🚧:". Do not leave these comments in your final submission!
 
 #### Contents:
 - [Analysis](#analysis)
@@ -29,9 +25,17 @@ This is a minimal Pizzeria Reference Project (PizzaRP) as a template for student
 
 ### Scenario
 
-PizzaRP (Pizzeria Reference Project) is the smallest possible and lightweight demonstration tool allowing the pizzaiolo (Role: Admin) to manage its pizza catalog. 
+The Brauverein Full is a brewing association based in Full. It was founded in June 2018 by five people who aimed to produce beer for themselves, friends, and families. The reason for the foundation of an association was that the beer of a private individual is legally not allowed to leave the property where it is brewed, which complicated the sharing with other people. Through the small size of the village, which has less than 1000 inhabitants, the word of a local brewery spread, and the association gained in popularity and customers.
+The Brauverein Full has been managing its stock and sales using a self-made Excel sheet that has become increasingly time-consuming, error-prone, and difficult to manage as the association has grown in size and complexity. The association has decided to switch to a webbased application to streamline and automate its inventory management, sales tracking, and reporting processes. The new application will enable the association to track its inventory levels in real-time, automatically generate sales reports, and provide better visibility into its sales trends and stock turnover rates.
+This project aims to improve the efficiency and accuracy of the Brauverein Full’s inventory management and sales tracking, reducing administrative overhead and enabling the association to make data-driven decisions to optimize their operations and meet the needs of their members and customers more effectively. 
+
+The Excel sheet used for the stock and sales management was created by the head of administration of the Brauverein Full. Its purpose is to give the association members a better overview of the inventory levels and decrease the effort at the end of the year to create the report for the customs administration overseeing the taxation of sold beer.
+Since the Excel sheet includes many complex formulas, the remainder of the association will not use the tool out of fear of deleting or breaking something. As a solution to this problem, the head of administration currently manages to fill the Excel sheet herself. The association members transmit the information about withdrawals from the inventory via a specific WhatsApp chat. They are then transferred into the Excel sheet by the head of administration, which leads to a double track and a high administrative effort for multiple members. Furthermore, since only one out of five people opened the Excel sheet, it lost its purpose.
+The Excel sheet does not give any insights about specific customers or their orders since the administrative workload is tried to be held as small as possible for the head of administration. With the implementation of a web-based application, this information could be easily added and would provide better visibility into the sales trends.
 
 ### User Stories
+
+#### User Stories General
 1. As an Admin, I want to have a Web app to use on different mobile devices and desktop computers.
 2. As an Admin, I want to see a consistent visual appearance to navigate easily, and it should look consistent.
 3. As an Admin, I want to use list views to explore and read my business data.
@@ -40,14 +44,59 @@ PizzaRP (Pizzeria Reference Project) is the smallest possible and lightweight de
 6. As a User, I want to use list views so that I can access public pages.
 7. (Optional) As a User, I want to authenticate myself so that I can read my personal and confidential data.
 
+#### User Stories Administration
+1. As a Head of Administration, I want to add user accounts so that I can grant access to new users.
+2. As a User, I want to edit my user account so that I can update user information when necessary.
+3. As a Head of Administration, I want to delete user accounts so that I can remove access when needed.
+4. As a User, I want to log in so that I can access the system securely.
+5. As a User, I want to log out so that I can securely end my session.
+
+#### User Stories Inventory
+1. As a User, I want to add inventory so that I can keep track of new stock.
+2. As a User, I want to edit inventory so that I can update inventory details.
+3. As a Head of Administration, I want to delete inventory so that I can remove outdated or incorrect stock entries.
+
+#### User Stories Brewing & Bottling
+1. As a User, I want to add a brewing protocol so that I can document new brewing processes.
+2. As a User, I want to edit brewing protocols so that I can update brewing process details.
+3. As a Head of Administration, I want to delete brewing protocols so that I can remove outdated or incorrect processes.
+4. As a User, I want to add bottling information so that I can record packaging details.
+5. As a User, I want to edit bottling records so that I can update packaging information.
+6. As a Head of Administration, I want to delete bottling records so that I can remove incorrect or outdated packaging data.
+7. As a User, I want to view brewing protocols so that I can understand the brewing processes.
+8. As a User, I want to query brewing and bottling information so that I can get insights into production data.
+
 ### Use Case
 
-![](images/use-case.png)
+#### Use Case 100 Administration
+![image](https://github.com/user-attachments/assets/b96bf3f3-9f86-48a2-ae54-d099608180a2)
+ 
+- UC-101 [Add User Account]: The system shall allow the head of administration to create a new user account
+- UC-102 [Edit User Account]: The system shall allow the user to edit their account
+- UC-103 [Delete User Account]: The system shall allow the head of administration to delete a user account
+- UC-104 [User Login]: The system shall allow the user to log in
+- UC-105 [User Logout]: The system shall allow the user to log out
 
-- UC-1 [Show all the Pizza]: Admin can retrieve all the pizza on the menu
-- UC-2 [Show a Pizza]: Admin can retrieve the information on a specific pizza.
-- UC-3 [Edit a Pizza]: Admin can create, update, and delete pizzas from the menu.
-- UC-4 [Show Current Location Offer]: User can retrieve special menu by location
+#### Use Case 200 Inventory
+![image](https://github.com/user-attachments/assets/6575f187-2fba-4dbe-9645-527392fbd26a)
+
+- UC-201 [Add Inventory]: The system shall allow the user to add inventory
+- UC-202 [Edit Inventory]: The system shall allow the user to edit previously entered
+inventory
+- UC-203 [Delete Inventory]: The system shall allow the head of administration to delete previously recorded inventory
+
+#### Use Case 300 Brewing & Bottling
+![image](https://github.com/user-attachments/assets/7db469ff-2f65-480d-a896-c7aaa941a372)
+
+- UC-301 [Add Brewing Protocol]: The system shall allow the user to create a brewing protocol  
+- UC-302 [Edit Brewing Protocol]: The system shall allow the user to edit an existing brewing protocol 
+- UC-303 [Delete Brewing Protocol]: The system shall allow the head of administration to delete an existing brewing protocol  
+- UC-304 [Add Bottling]: The system shall allow the user to register a new bottling process
+- UC-305 [ Edit Bottling]: The system shall allow the user to edit an existing bottling process
+- UC-306 [Delete Bottling]: The system shall allow the user to delete an existing bottling process
+- UC-307 [Viewing Brewing Bottling]: The system shall allow the user to view the brewing protocol in its current state 
+- UC-308 [Query Brewing & Bottling]: The system shall allow the user to query a report of the brewing and bottling for taxes
+
 
 ## Design
 > 🚧: Keep in mind the Corporate Identity (CI); you shall decide appropriately the color schema, graphics, typography, layout, User Experience (UX), and so on.
@@ -57,15 +106,35 @@ PizzaRP (Pizzeria Reference Project) is the smallest possible and lightweight de
 
 Starting from the home page, we can visit different pages. Available public pages are visible in the menu...
 
+## Landing Page:
+![image](https://github.com/user-attachments/assets/319f9ffd-2c1d-4a3f-8350-2527f28bcb35)
+
+## Brewing and Bottling:
+![image](https://github.com/user-attachments/assets/b29774cd-b88a-4695-8b99-8eecc00ff94d)
+![image](https://github.com/user-attachments/assets/137b861a-4ea2-4e75-86c6-c52181f76d94)
+
+## Brewing Protocol:
+![image](https://github.com/user-attachments/assets/b61edacb-2d51-4ece-a70a-5c7004eba6c9)
+![image](https://github.com/user-attachments/assets/b50af2fe-b741-449f-b4e9-509324c873e2)
+![image](https://github.com/user-attachments/assets/43823a7e-8e50-4515-ac1f-f6911f54eceb)
+
+## Customer overview
+![image](https://github.com/user-attachments/assets/86aeff53-199b-4ce0-b069-0a6a6e3bf01d)
+
+## Inventory Overview
+![image](https://github.com/user-attachments/assets/47c82f82-202d-4729-af1c-b43bba680e65)
+
+## Landing Page with stock warning
+![image](https://github.com/user-attachments/assets/0104036d-4fed-4b14-be50-84a388ee8648)
+
+
 ### Prototype
 > 🚧: A prototype can be designed using placeholder text/figures in Budibase. You don't need to connect the front-end to back-end in the early stages of the project development.
 
 ### Domain Design
 > 🚧: Provide a picture and describe your domain model; you may use Entity-Relationship Model or UML class diagram. Both can be created in Visual Paradigm - we have an academic license for it.
 
-The `ch.fhnw.pizza.data.domain` package contains the following domain objects / entities including getters and setters:
-
-![](images/domain-model.png)
+![image](https://github.com/user-attachments/assets/95b6d352-e775-470f-8637-90a0fd58aa9b)
 
 ### Business Logic 
 > 🚧: Describe the business logic for **at least one business service** in detail. If available, show the expected path and HTPP method. The remaining documentation of APIs shall be made available in the swagger endpoint. The default Swagger UI page is available at /swagger-ui.html.
@@ -156,8 +225,8 @@ Alternatively, you can deploy your application to a free PaaS like [Render](http
 > 🚧: Include all the participants and briefly describe each of their **individual** contribution and/or roles. Screenshots/descriptions of your Kanban board or similar project management tools are welcome.
 
 ### Roles
-- Back-end developer: Charuta Pande 
-- Front-end developer: Devid Montecchiari
+- Back-end developer: 
+- Front-end developer: 
 
 ### Milestones
 1. **Analysis**: Scenario ideation, use case analysis and user story writing.
@@ -170,8 +239,10 @@ Alternatively, you can deploy your application to a free PaaS like [Render](http
 
 
 #### Maintainer
-- Charuta Pande
-- Devid Montecchiari
+- Claudia Graf
+- Tuangporn Siwaboon
+- Yannik Stöckli
+- Soheyla Tofighi 
 
 #### License
 - [Apache License, Version 2.0](blob/master/LICENSE)
