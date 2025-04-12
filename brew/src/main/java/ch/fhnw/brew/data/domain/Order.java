@@ -2,9 +2,10 @@ package ch.fhnw.brew.data.domain;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "orders") // "order" is a reserved keyword in many DBs
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -14,13 +15,14 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private Date orderDate;
 
-    private String beerName; // This should match InventoryCategoryName
+    private String beerName;
     private Integer amount;
 
     @ManyToOne
     private Customer customer;
 
-    // Getters and Setters
+    @ElementCollection
+    private List<Integer> batchNumbers;
 
     public Integer getOrderID() {
         return orderID;
@@ -60,5 +62,13 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<Integer> getBatchNumbers() {
+        return batchNumbers;
+    }
+
+    public void setBatchNumbers(List<Integer> batchNumbers) {
+        this.batchNumbers = batchNumbers;
     }
 }

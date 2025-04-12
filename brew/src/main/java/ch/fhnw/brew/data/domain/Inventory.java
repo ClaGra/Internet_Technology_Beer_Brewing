@@ -1,6 +1,7 @@
 package ch.fhnw.brew.data.domain;
 
 import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "inventory")
@@ -12,8 +13,10 @@ public class Inventory {
 
     private Integer inventoryAmount;
     private String inventoryCategoryName;
+    private Integer batchNr;
 
-    // Getters and Setters
+    @Temporal(TemporalType.DATE)
+    private Date expirationDate;
 
     public Integer getInventoryID() {
         return inventoryID;
@@ -37,5 +40,21 @@ public class Inventory {
 
     public void setInventoryCategoryName(String inventoryCategoryName) {
         this.inventoryCategoryName = inventoryCategoryName;
+    }
+
+    public Integer getBatchNr() {
+        return batchNr;
+    }
+
+    public void setBatchNr(Integer batchNr) {
+        this.batchNr = batchNr;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }

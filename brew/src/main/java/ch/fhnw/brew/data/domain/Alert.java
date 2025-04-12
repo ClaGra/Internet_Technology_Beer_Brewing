@@ -11,12 +11,10 @@ public class Alert {
     private Integer alertID;
 
     private String alertName;
-    private String alertTrigger; // e.g. "Inventory too low: IPA < 5 units"
+    private String alertTrigger;
 
     @ManyToOne
-    private User user; // optional — who should receive it
-
-    // Getters and Setters
+    private User user;
 
     public Integer getAlertID() {
         return alertID;

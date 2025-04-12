@@ -31,4 +31,11 @@ public class AlertService {
     public List<Alert> getAllAlerts() {
         return alertRepository.findAll();
     }
+
+    public void triggerLowInventoryAlert(String category, int currentAmount) {
+        Alert alert = new Alert();
+        alert.setAlertName("Low Inventory");
+        alert.setAlertTrigger("Inventory for " + category + " is below threshold: " + currentAmount + " units.");
+        alertRepository.save(alert);
+    }
 }

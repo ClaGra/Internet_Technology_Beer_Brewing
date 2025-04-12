@@ -2,7 +2,6 @@ package ch.fhnw.brew.controller;
 
 import ch.fhnw.brew.business.service.RecipeService;
 import ch.fhnw.brew.data.domain.Recipe;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,39 +11,42 @@ import java.util.List;
 @RequestMapping("/recipes")
 public class RecipeController {
 
-    @Autowired
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
+
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     @PostMapping
-    public ResponseEntity<?> addRecipe(@RequestBody Recipe recipe) {
+    public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe) {
         return ResponseEntity.ok(recipeService.addRecipe(recipe));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editRecipe(@PathVariable Integer id, @RequestBody Recipe recipe) {
+    public ResponseEntity<Recipe> editRecipe(@PathVariable Integer id, @RequestBody Recipe recipe) {
         try {
             return ResponseEntity.ok(recipeService.editRecipe(id, recipe));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRecipe(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
         try {
             recipeService.deleteRecipe(id);
-            return ResponseEntity.ok("Recipe deleted successfully");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRecipe(@PathVariable Integer id) {
+    public ResponseEntity<Recipe> getRecipe(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(recipeService.getRecipe(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 

@@ -1,6 +1,8 @@
 package ch.fhnw.brew.data.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.util.Date;
 
 @Entity
@@ -11,19 +13,31 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerID;
 
+    @NotBlank(message = "First name is required")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
+
+    @Past(message = "Date of birth must be in the past")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+
     private String street;
     private String postalAddress;
-    private String zipCode;
-    private String city;
-    private String email;
-    private String phone;
-    private String gender;
 
-    // Getters and Setters
+    @Pattern(regexp = "\\d{4}", message = "ZIP code must be 4 digits")
+    private String zipCode;
+
+    private String city;
+
+    @Email(message = "Invalid email format")
+    private String email;
+
+    @Pattern(regexp = "^(\\+41|0)[0-9]{9}$", message = "Phone must be a valid Swiss number")
+    private String phone;
+
+    private String gender;
 
     public Integer getCustomerID() {
         return customerID;

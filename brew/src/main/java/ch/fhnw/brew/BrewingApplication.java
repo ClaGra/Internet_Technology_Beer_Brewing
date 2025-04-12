@@ -41,41 +41,50 @@ public class BrewingApplication {
         // Recipe
         Recipe ipaRecipe = new Recipe();
         ipaRecipe.setRecipeName("Hoppy IPA");
-        ipaRecipe.setRecipeCategoryName("India Pale Ale");
+        ipaRecipe.setRecipeCategory(RecipeCategory.STRONG_BEER);
         ipaRecipe = recipeService.addRecipe(ipaRecipe);
 
-        // BrewingProtocol
+        // Brewing Protocol
         BrewingProtocol protocol = new BrewingProtocol();
         protocol.setBrewingDate(new Date());
         protocol.setRecipe(ipaRecipe);
         protocol.setOriginalGravity(1.060f);
         protocol.setFinalGravity(1.012f);
         protocol.setFermentationTankNumber("FT-01");
+        protocol.setFermentationTankTemperature(20.0f);
         protocol.setHopsType("Cascade");
         protocol.setHopsAmount(5.0f);
+        protocol.setHopsTime(60);
         protocol.setMaltType("Pale Malt");
         protocol.setMaltAmount(10.0f);
         protocol.setYeastType("Ale Yeast");
         protocol.setYeastAmount(0.5f);
+        protocol.setWaterTreatmentType("Gypsum");
+        protocol.setWaterTreatmentAmount(1.5f);
+        protocol.setTemperatureMashIn(67.0f);
+        protocol.setTemperatureMash(67.0f);
+        protocol.setTemperatureMashOut(75.0f);
+        protocol.setWaterMainCast(200.0f);
+        protocol.setWaterSparge1(20.0f);
+        protocol.setWaterSparge2(15.0f);
+        protocol.setFurtherAdditionType("Coriander");
+        protocol.setFurtherAdditionAmount(0.2f);
+        protocol.setFurtherAdditionTime(5);
         brewingProtocolService.addBrewingProtocol(protocol);
 
-        // Bottling
+        // Bottling (expiration will be set automatically to bottlingDate + 180 days)
         Bottling bottling = new Bottling();
         bottling.setBottlingDate(new Date());
-        bottling.setExpirationDate(new Date(System.currentTimeMillis() + 31556952000L)); // +1 year
         bottling.setAmount(100);
         bottling.setBrewingProtocol(protocol);
-        bottlingService.addBottling(bottling); // Will auto-update inventory
-
-        // Inventory (optional manual initialization)
-        inventoryService.updateInventoryAmount("Hoppy IPA", 100);
+        bottlingService.addBottling(bottling); // Automatically updates inventory
 
         // Order
         Order order = new Order();
         order.setOrderDate(new Date());
-        order.setBeerName("Hoppy IPA");
+        order.setBeerName(ipaRecipe.getRecipeName());
         order.setAmount(10);
         order.setCustomer(customer);
-        orderService.addOrder(order); // Will decrease inventory
+        orderService.addOrder(order); // Automatically decreases inventory
     }
 }

@@ -11,9 +11,9 @@ public class Recipe {
     private Integer recipeID;
 
     private String recipeName;
-    private String recipeCategoryName;
 
-    // Getters and Setters
+    @Enumerated(EnumType.STRING)
+    private RecipeCategory recipeCategory;
 
     public Integer getRecipeID() {
         return recipeID;
@@ -31,11 +31,11 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    public String getRecipeCategoryName() {
-        return recipeCategoryName;
+    public RecipeCategory getRecipeCategory() {
+        return recipeCategory;
     }
 
-    public void setRecipeCategoryName(String recipeCategoryName) {
-        this.recipeCategoryName = recipeCategoryName;
+    public void setRecipeCategory(RecipeCategory recipeCategory) {
+        this.recipeCategory = recipeCategory;
     }
 }

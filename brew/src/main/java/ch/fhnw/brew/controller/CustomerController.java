@@ -2,6 +2,8 @@ package ch.fhnw.brew.controller;
 
 import ch.fhnw.brew.business.service.CustomerService;
 import ch.fhnw.brew.data.domain.Customer;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +18,12 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.addCustomer(customer));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+    public ResponseEntity<?> editCustomer(@PathVariable Integer id, @Valid @RequestBody Customer customer) {
         try {
             return ResponseEntity.ok(customerService.editCustomer(id, customer));
         } catch (Exception e) {
