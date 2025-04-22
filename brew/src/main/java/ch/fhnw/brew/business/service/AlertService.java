@@ -2,6 +2,7 @@ package ch.fhnw.brew.business.service;
 
 import ch.fhnw.brew.data.domain.Alert;
 import ch.fhnw.brew.data.repository.AlertRepository;
+import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +18,15 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
-    public void deleteAlert(Integer id) throws Exception {
-        if (!alertRepository.existsById(id)) {
-            throw new Exception("Alert not found");
-        }
-        alertRepository.deleteById(id);
+    public void deleteAlert(Integer id) {
+        Alert existing = alertRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Alert not found"));
+        alertRepository.delete(existing);
     }
 
-    public Alert getAlert(Integer id) throws Exception {
-        return alertRepository.findById(id).orElseThrow(() -> new Exception("Alert not found"));
+    public Alert getAlert(Integer id) {
+        return alertRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Alert not found"));
     }
 
     public List<Alert> getAllAlerts() {

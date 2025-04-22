@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/bottlings")
@@ -16,40 +17,28 @@ public class BottlingController {
     private BottlingService bottlingService;
 
     @PostMapping
-    public ResponseEntity<?> addBottling(@RequestBody Bottling bottling) {
+    public ResponseEntity<Bottling> addBottling(@RequestBody Bottling bottling) {
         return ResponseEntity.ok(bottlingService.addBottling(bottling));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editBottling(@PathVariable Integer id, @RequestBody Bottling bottling) {
-        try {
-            return ResponseEntity.ok(bottlingService.editBottling(id, bottling));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Bottling> editBottling(@PathVariable Integer id, @RequestBody Bottling bottling) {
+        return ResponseEntity.ok(bottlingService.editBottling(id, bottling));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBottling(@PathVariable Integer id) {
-        try {
-            bottlingService.deleteBottling(id);
-            return ResponseEntity.ok("Bottling deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Map<String, String>> deleteBottling(@PathVariable Integer id) {
+        bottlingService.deleteBottling(id);
+        return ResponseEntity.ok(Map.of("message", "Bottling deleted successfully"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBottling(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(bottlingService.getBottling(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Bottling> getBottling(@PathVariable Integer id) {
+        return ResponseEntity.ok(bottlingService.getBottling(id));
     }
 
     @GetMapping
-    public List<Bottling> getAllBottlings() {
-        return bottlingService.getAllBottlings();
+    public ResponseEntity<List<Bottling>> getAllBottlings() {
+        return ResponseEntity.ok(bottlingService.getAllBottlings());
     }
 }

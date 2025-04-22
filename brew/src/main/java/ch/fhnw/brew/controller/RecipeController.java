@@ -2,20 +2,19 @@ package ch.fhnw.brew.controller;
 
 import ch.fhnw.brew.business.service.RecipeService;
 import ch.fhnw.brew.data.domain.Recipe;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
 
-    private final RecipeService recipeService;
-
-    public RecipeController(RecipeService recipeService) {
-        this.recipeService = recipeService;
-    }
+    @Autowired
+    private RecipeService recipeService;
 
     @PostMapping
     public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe) {
@@ -24,34 +23,22 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> editRecipe(@PathVariable Integer id, @RequestBody Recipe recipe) {
-        try {
-            return ResponseEntity.ok(recipeService.editRecipe(id, recipe));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(recipeService.editRecipe(id, recipe));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
-        try {
-            recipeService.deleteRecipe(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Map<String, String>> deleteRecipe(@PathVariable Integer id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.ok(Map.of("message", "Recipe deleted successfully"));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipe(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(recipeService.getRecipe(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(recipeService.getRecipe(id));
     }
 
     @GetMapping
-    public List<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
+    public ResponseEntity<List<Recipe>> getAllRecipes() {
+        return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 }

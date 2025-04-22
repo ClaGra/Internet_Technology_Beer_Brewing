@@ -1,10 +1,10 @@
-package ch.fhnw.pizza;
+package ch.fhnw.brew;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PizzaApplicationTests {
+class BrewingApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/protocols")
@@ -16,40 +17,28 @@ public class BrewingProtocolController {
     private BrewingProtocolService brewingProtocolService;
 
     @PostMapping
-    public ResponseEntity<?> addProtocol(@RequestBody BrewingProtocol protocol) {
+    public ResponseEntity<BrewingProtocol> addProtocol(@RequestBody BrewingProtocol protocol) {
         return ResponseEntity.ok(brewingProtocolService.addBrewingProtocol(protocol));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editProtocol(@PathVariable Integer id, @RequestBody BrewingProtocol protocol) {
-        try {
-            return ResponseEntity.ok(brewingProtocolService.editBrewingProtocol(id, protocol));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<BrewingProtocol> editProtocol(@PathVariable Integer id, @RequestBody BrewingProtocol protocol) {
+        return ResponseEntity.ok(brewingProtocolService.editBrewingProtocol(id, protocol));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProtocol(@PathVariable Integer id) {
-        try {
-            brewingProtocolService.deleteBrewingProtocol(id);
-            return ResponseEntity.ok("Brewing Protocol deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Map<String, String>> deleteProtocol(@PathVariable Integer id) {
+        brewingProtocolService.deleteBrewingProtocol(id);
+        return ResponseEntity.ok(Map.of("message", "Brewing Protocol deleted successfully"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProtocol(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(brewingProtocolService.getBrewingProtocol(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<BrewingProtocol> getProtocol(@PathVariable Integer id) {
+        return ResponseEntity.ok(brewingProtocolService.getBrewingProtocol(id));
     }
 
     @GetMapping
-    public List<BrewingProtocol> getAllProtocols() {
-        return brewingProtocolService.getAllBrewingProtocols();
+    public ResponseEntity<List<BrewingProtocol>> getAllProtocols() {
+        return ResponseEntity.ok(brewingProtocolService.getAllBrewingProtocols());
     }
 }

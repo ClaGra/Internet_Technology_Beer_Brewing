@@ -1,7 +1,12 @@
 package ch.fhnw.brew.business.service;
 
 import ch.fhnw.brew.data.domain.Bottling;
+import ch.fhnw.brew.data.domain.BrewingProtocol;
+import ch.fhnw.brew.data.domain.Inventory;
 import ch.fhnw.brew.data.repository.BottlingRepository;
+import ch.fhnw.brew.data.repository.BrewingProtocolRepository;
+import ch.fhnw.brew.data.repository.InventoryRepository;
+import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,57 +20,83 @@ public class BottlingService {
     private BottlingRepository bottlingRepository;
 
     @Autowired
+    private BrewingProtocolRepository brewingProtocolRepository;
+
+    @Autowired
     private InventoryService inventoryService;
 
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
     public Bottling addBottling(Bottling bottling) {
-        // Set expiration date = bottling date + 180 days
-        if (bottling.getBottlingDate() != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(bottling.getBottlingDate());
-            calendar.add(Calendar.DAY_OF_YEAR, 180);
-            bottling.setExpirationDate(calendar.getTime());
-        }
+        Integer batchNr = bottling.getBrewingProtocol().getBatchNr();
+
+        BrewingProtocol fullProtocol = brewingProtocolRepository.findById(batchNr)
+                .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
+
+        bottling.setBrewingProtocol(fullProtocol);
+        setExpirationDate(bottling);
 
         Bottling saved = bottlingRepository.save(bottling);
         inventoryService.addInventoryFromBottling(saved);
         return saved;
     }
 
-    public Bottling editBottling(Integer id, Bottling updatedBottling) throws Exception {
+    public Bottling editBottling(Integer id, Bottling updatedBottling) {
         Bottling existing = bottlingRepository.findById(id)
-            .orElseThrow(() -> new Exception("Bottling not found"));
+                .orElseThrow(() -> new NotFoundException("Bottling not found"));
 
-        // Remove old inventory linked to original batch
-        inventoryService.removeInventoryForBatch(existing.getBrewingProtocol().getBatchNr());
+        int oldAmount = existing.getAmount();
+        int newAmount = updatedBottling.getAmount();
+        int delta = newAmount - oldAmount;
 
-        // Recalculate expiration date in case bottling date changed
-        if (updatedBottling.getBottlingDate() != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(updatedBottling.getBottlingDate());
-            calendar.add(Calendar.DAY_OF_YEAR, 180);
-            updatedBottling.setExpirationDate(calendar.getTime());
+        Integer batchNr = existing.getBrewingProtocol().getBatchNr();
+        List<Inventory> inventories = inventoryRepository.findByBatchNr(batchNr);
+
+        if (inventories.isEmpty()) {
+            throw new NotFoundException("Inventory for batch " + batchNr + " not found");
         }
 
-        Bottling saved = bottlingRepository.save(updatedBottling);
-        inventoryService.addInventoryFromBottling(saved);
+        Inventory inventory = inventories.get(0);
+        int currentInventoryAmount = inventory.getInventoryAmount();
+        inventory.setInventoryAmount(currentInventoryAmount + delta);
+        inventoryRepository.save(inventory);
 
-        return saved;
+        existing.setAmount(updatedBottling.getAmount());
+        existing.setBottlingDate(updatedBottling.getBottlingDate());
+        existing.setFinalGravity(updatedBottling.getFinalGravity());
+
+        BrewingProtocol fullProtocol = brewingProtocolRepository.findById(batchNr)
+                .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
+        existing.setBrewingProtocol(fullProtocol);
+
+        setExpirationDate(existing);
+        return bottlingRepository.save(existing);
     }
 
-    public void deleteBottling(Integer id) throws Exception {
+    public void deleteBottling(Integer id) {
         Bottling existing = bottlingRepository.findById(id)
-            .orElseThrow(() -> new Exception("Bottling record not found"));
+                .orElseThrow(() -> new NotFoundException("Bottling not found"));
 
         inventoryService.removeInventoryForBatch(existing.getBrewingProtocol().getBatchNr());
-        bottlingRepository.deleteById(id);
+        bottlingRepository.delete(existing);
     }
 
-    public Bottling getBottling(Integer id) throws Exception {
+    public Bottling getBottling(Integer id) {
         return bottlingRepository.findById(id)
-            .orElseThrow(() -> new Exception("Bottling record not found"));
+                .orElseThrow(() -> new NotFoundException("Bottling not found"));
     }
 
     public List<Bottling> getAllBottlings() {
         return bottlingRepository.findAll();
+    }
+
+    private void setExpirationDate(Bottling bottling) {
+        if (bottling.getBottlingDate() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(bottling.getBottlingDate());
+            calendar.add(Calendar.DAY_OF_YEAR, 180);
+            bottling.setExpirationDate(calendar.getTime());
+        }
     }
 }

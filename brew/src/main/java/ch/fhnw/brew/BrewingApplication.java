@@ -9,7 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -38,53 +39,81 @@ public class BrewingApplication {
         customer.setPhone("0781234567");
         customerService.addCustomer(customer);
 
-        // Recipe
+        // Recipe 1: IPA
         Recipe ipaRecipe = new Recipe();
         ipaRecipe.setRecipeName("Hoppy IPA");
         ipaRecipe.setRecipeCategory(RecipeCategory.STRONG_BEER);
         ipaRecipe = recipeService.addRecipe(ipaRecipe);
 
-        // Brewing Protocol
-        BrewingProtocol protocol = new BrewingProtocol();
-        protocol.setBrewingDate(new Date());
-        protocol.setRecipe(ipaRecipe);
-        protocol.setOriginalGravity(1.060f);
-        protocol.setFinalGravity(1.012f);
-        protocol.setFermentationTankNumber("FT-01");
-        protocol.setFermentationTankTemperature(20.0f);
-        protocol.setHopsType("Cascade");
-        protocol.setHopsAmount(5.0f);
-        protocol.setHopsTime(60);
-        protocol.setMaltType("Pale Malt");
-        protocol.setMaltAmount(10.0f);
-        protocol.setYeastType("Ale Yeast");
-        protocol.setYeastAmount(0.5f);
-        protocol.setWaterTreatmentType("Gypsum");
-        protocol.setWaterTreatmentAmount(1.5f);
-        protocol.setTemperatureMashIn(67.0f);
-        protocol.setTemperatureMash(67.0f);
-        protocol.setTemperatureMashOut(75.0f);
-        protocol.setWaterMainCast(200.0f);
-        protocol.setWaterSparge1(20.0f);
-        protocol.setWaterSparge2(15.0f);
-        protocol.setFurtherAdditionType("Coriander");
-        protocol.setFurtherAdditionAmount(0.2f);
-        protocol.setFurtherAdditionTime(5);
-        brewingProtocolService.addBrewingProtocol(protocol);
+        // Recipe 2: Lager
+        Recipe lagerRecipe = new Recipe();
+        lagerRecipe.setRecipeName("Smooth Lager");
+        lagerRecipe.setRecipeCategory(RecipeCategory.LIGHT_BEER);
+        lagerRecipe = recipeService.addRecipe(lagerRecipe);
 
-        // Bottling (expiration will be set automatically to bottlingDate + 180 days)
-        Bottling bottling = new Bottling();
-        bottling.setBottlingDate(new Date());
-        bottling.setAmount(100);
-        bottling.setBrewingProtocol(protocol);
-        bottlingService.addBottling(bottling); // Automatically updates inventory
+        // Brewing Protocol for IPA
+        BrewingProtocol ipaProtocol = new BrewingProtocol();
+        ipaProtocol.setBrewingDate(java.sql.Date.valueOf(LocalDate.now()));
+        ipaProtocol.setRecipe(ipaRecipe);
+        ipaProtocol.setOriginalGravity(1.060f);
+        ipaProtocol.setFermentationTankNumber("FT-01");
+        ipaProtocol.setFermentationTankTemperature(20.0f);
+        ipaProtocol.setHopsType("Cascade");
+        ipaProtocol.setHopsAmount(5.0f);
+        ipaProtocol.setHopsTime(60);
+        ipaProtocol.setMaltType("Pale Malt");
+        ipaProtocol.setMaltAmount(10.0f);
+        ipaProtocol.setYeastType("Ale Yeast");
+        ipaProtocol.setYeastAmount(0.5f);
+        ipaProtocol.setWaterTreatmentType("Gypsum");
+        ipaProtocol.setWaterTreatmentAmount(1.5f);
+        ipaProtocol.setTemperatureMashIn(67.0f);
+        ipaProtocol.setTemperatureMash(67.0f);
+        ipaProtocol.setTemperatureMashOut(75.0f);
+        ipaProtocol.setWaterQuantityMainCast(200.0f);
+        ipaProtocol.setWaterQuantitySparge1(20.0f);
+        ipaProtocol.setWaterQuantitySparge2(15.0f);
+        ipaProtocol.setFurtherAdditionType("Coriander");
+        ipaProtocol.setFurtherAdditionAmount(0.2f);
+        ipaProtocol.setFurtherAdditionTime(5);
+        brewingProtocolService.addBrewingProtocol(ipaProtocol);
 
-        // Order
+        // Brewing Protocol for Lager
+        BrewingProtocol lagerProtocol = new BrewingProtocol();
+        lagerProtocol.setBrewingDate(java.sql.Date.valueOf(LocalDate.now()));
+        lagerProtocol.setRecipe(lagerRecipe);
+        brewingProtocolService.addBrewingProtocol(lagerProtocol);
+
+        // Bottling for IPA
+        Bottling ipaBottling = new Bottling();
+        ipaBottling.setBottlingDate(java.sql.Date.valueOf(LocalDate.now()));
+        ipaBottling.setAmount(100);
+        ipaBottling.setFinalGravity(1.012f); // <-- Set Final Gravity
+        ipaBottling.setBrewingProtocol(ipaProtocol);
+        bottlingService.addBottling(ipaBottling);
+
+        // Bottling for Lager
+        Bottling lagerBottling = new Bottling();
+        lagerBottling.setBottlingDate(java.sql.Date.valueOf(LocalDate.now()));
+        lagerBottling.setAmount(80);
+        lagerBottling.setFinalGravity(1.008f); // <-- Set Final Gravity
+        lagerBottling.setBrewingProtocol(lagerProtocol);
+        bottlingService.addBottling(lagerBottling);
+
+        // Order with multiple beer types
+        OrderItem ipaItem = new OrderItem();
+        ipaItem.setBeerName("Hoppy IPA");
+        ipaItem.setAmount(10);
+
+        OrderItem lagerItem = new OrderItem();
+        lagerItem.setBeerName("Smooth Lager");
+        lagerItem.setAmount(5);
+
         Order order = new Order();
-        order.setOrderDate(new Date());
-        order.setBeerName(ipaRecipe.getRecipeName());
-        order.setAmount(10);
+        order.setOrderDate(LocalDate.now());
         order.setCustomer(customer);
-        orderService.addOrder(order); // Automatically decreases inventory
+        order.setItems(List.of(ipaItem, lagerItem));
+
+        orderService.addOrder(order);
     }
 }

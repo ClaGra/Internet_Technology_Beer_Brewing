@@ -3,7 +3,7 @@ package ch.fhnw.brew.data.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "customer")
@@ -13,18 +13,18 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerID;
 
+    @Column(nullable = false)
     @NotBlank(message = "First name is required")
     private String firstName;
 
+    @Column(nullable = false)
     @NotBlank(message = "Last name is required")
     private String lastName;
 
     @Past(message = "Date of birth must be in the past")
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     private String street;
-    private String postalAddress;
 
     @Pattern(regexp = "\\d{4}", message = "ZIP code must be 4 digits")
     private String zipCode;
@@ -63,11 +63,11 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -79,13 +79,6 @@ public class Customer {
         this.street = street;
     }
 
-    public String getPostalAddress() {
-        return postalAddress;
-    }
-
-    public void setPostalAddress(String postalAddress) {
-        this.postalAddress = postalAddress;
-    }
 
     public String getZipCode() {
         return zipCode;

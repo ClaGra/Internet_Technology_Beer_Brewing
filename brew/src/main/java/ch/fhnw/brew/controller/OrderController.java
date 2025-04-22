@@ -2,11 +2,13 @@ package ch.fhnw.brew.controller;
 
 import ch.fhnw.brew.business.service.OrderService;
 import ch.fhnw.brew.data.domain.Order;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/orders")
@@ -16,44 +18,28 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> addOrder(@RequestBody Order order) {
-        try {
-            return ResponseEntity.ok(orderService.addOrder(order));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Order> addOrder(@Valid @RequestBody Order order) {
+        return ResponseEntity.ok(orderService.addOrder(order));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editOrder(@PathVariable Integer id, @RequestBody Order order) {
-        try {
-            return ResponseEntity.ok(orderService.editOrder(id, order));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Order> editOrder(@PathVariable Integer id, @Valid @RequestBody Order order) {
+        return ResponseEntity.ok(orderService.editOrder(id, order));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
-        try {
-            orderService.deleteOrder(id);
-            return ResponseEntity.ok("Order deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Map<String, String>> deleteOrder(@PathVariable Integer id) {
+        orderService.deleteOrder(id);
+        return ResponseEntity.ok(Map.of("message", "Order deleted successfully"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrder(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(orderService.getOrder(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Order> getOrder(@PathVariable Integer id) {
+        return ResponseEntity.ok(orderService.getOrder(id));
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<List<Order>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 }

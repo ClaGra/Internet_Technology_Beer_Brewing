@@ -3,12 +3,12 @@ package ch.fhnw.brew.controller;
 import ch.fhnw.brew.business.service.CustomerService;
 import ch.fhnw.brew.data.domain.Customer;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/customers")
@@ -18,40 +18,28 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer) {
+    public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.addCustomer(customer));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editCustomer(@PathVariable Integer id, @Valid @RequestBody Customer customer) {
-        try {
-            return ResponseEntity.ok(customerService.editCustomer(id, customer));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Customer> editCustomer(@PathVariable Integer id, @Valid @RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.editCustomer(id, customer));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable Integer id) {
-        try {
-            customerService.deleteCustomer(id);
-            return ResponseEntity.ok("Customer deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Map<String, String>> deleteCustomer(@PathVariable Integer id) {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.ok(Map.of("message", "Customer deleted successfully"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCustomer(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(customerService.getCustomer(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Customer> getCustomer(@PathVariable Integer id) {
+        return ResponseEntity.ok(customerService.getCustomer(id));
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 }

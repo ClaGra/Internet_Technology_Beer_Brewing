@@ -2,6 +2,8 @@ package ch.fhnw.brew.business.service;
 
 import ch.fhnw.brew.data.domain.Recipe;
 import ch.fhnw.brew.data.repository.RecipeRepository;
+import ch.fhnw.brew.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,19 +11,16 @@ import java.util.List;
 @Service
 public class RecipeService {
 
-    private final RecipeRepository recipeRepository;
-
-    public RecipeService(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     public Recipe addRecipe(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
 
-    public Recipe editRecipe(Integer id, Recipe updatedRecipe) throws Exception {
+    public Recipe editRecipe(Integer id, Recipe updatedRecipe) {
         Recipe recipe = recipeRepository.findById(id)
-            .orElseThrow(() -> new Exception("Recipe not found"));
+                .orElseThrow(() -> new NotFoundException("Recipe not found"));
 
         recipe.setRecipeName(updatedRecipe.getRecipeName());
         recipe.setRecipeCategory(updatedRecipe.getRecipeCategory());
@@ -29,16 +28,15 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-    public void deleteRecipe(Integer id) throws Exception {
-        if (!recipeRepository.existsById(id)) {
-            throw new Exception("Recipe does not exist");
-        }
-        recipeRepository.deleteById(id);
+    public void deleteRecipe(Integer id) {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Recipe not found"));
+        recipeRepository.delete(recipe);
     }
 
-    public Recipe getRecipe(Integer id) throws Exception {
+    public Recipe getRecipe(Integer id) {
         return recipeRepository.findById(id)
-            .orElseThrow(() -> new Exception("Recipe not found"));
+                .orElseThrow(() -> new NotFoundException("Recipe not found"));
     }
 
     public List<Recipe> getAllRecipes() {

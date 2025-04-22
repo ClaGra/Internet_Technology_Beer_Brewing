@@ -1,12 +1,14 @@
 package ch.fhnw.brew.business.service;
 
-import ch.fhnw.brew.data.domain.Inventory;
 import ch.fhnw.brew.data.domain.Bottling;
+import ch.fhnw.brew.data.domain.Inventory;
 import ch.fhnw.brew.data.repository.InventoryRepository;
+import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;  
+import org.springframework.stereotype.Service;
 
-import java.util.*;import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class InventoryService {
@@ -18,30 +20,36 @@ public class InventoryService {
     private AlertService alertService;
 
     public Inventory addInventory(Inventory inventory) {
-        inventory = inventoryRepository.save(inventory);
-        checkAlertThreshold(inventory.getInventoryCategoryName());
-        return inventory;
+        Inventory saved = inventoryRepository.save(inventory);
+        checkAlertThreshold(saved.getInventoryCategoryName());
+        return saved;
     }
 
-    public Inventory editInventory(Integer id, Inventory updated) throws Exception {
-        Inventory existing = inventoryRepository.findById(id).orElseThrow(() -> new Exception("Inventory not found"));
+    public Inventory editInventory(Integer id, Inventory updated) {
+        Inventory existing = inventoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Inventory not found"));
+
         existing.setInventoryAmount(updated.getInventoryAmount());
         existing.setInventoryCategoryName(updated.getInventoryCategoryName());
         existing.setBatchNr(updated.getBatchNr());
         existing.setExpirationDate(updated.getExpirationDate());
+
         Inventory saved = inventoryRepository.save(existing);
         checkAlertThreshold(saved.getInventoryCategoryName());
         return saved;
     }
 
-    public void deleteInventory(Integer id) throws Exception {
-        Inventory existing = inventoryRepository.findById(id).orElseThrow(() -> new Exception("Inventory not found"));
-        inventoryRepository.deleteById(id);
+    public void deleteInventory(Integer id) {
+        Inventory existing = inventoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Inventory not found"));
+
+        inventoryRepository.delete(existing);
         checkAlertThreshold(existing.getInventoryCategoryName());
     }
 
-    public Inventory getInventory(Integer id) throws Exception {
-        return inventoryRepository.findById(id).orElseThrow(() -> new Exception("Inventory not found"));
+    public Inventory getInventory(Integer id) {
+        return inventoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Inventory not found"));
     }
 
     public List<Inventory> getAllInventories() {
@@ -55,16 +63,9 @@ public class InventoryService {
                 .max(Comparator.comparing(Inventory::getInventoryID))
                 .orElse(null);
 
-        Inventory target;
-        if (latest == null) {
-            target = new Inventory();
-            target.setInventoryCategoryName(category);
-            target.setInventoryAmount(0);
-        } else {
-            target = latest;
-        }
-
-        target.setInventoryAmount(target.getInventoryAmount() + change);
+        Inventory target = (latest != null) ? latest : new Inventory();
+        target.setInventoryCategoryName(category);
+        target.setInventoryAmount(Optional.ofNullable(target.getInventoryAmount()).orElse(0) + change);
 
         if (target.getInventoryAmount() < 0) {
             throw new RuntimeException("Inventory would go below zero for category: " + category);
@@ -96,11 +97,11 @@ public class InventoryService {
     }
 
     public Map<String, Integer> getTotalInventoryByCategory() {
-        List<Inventory> all = inventoryRepository.findAll();
-        return all.stream().collect(Collectors.groupingBy(
-                Inventory::getInventoryCategoryName,
-                Collectors.summingInt(Inventory::getInventoryAmount)
-        ));
+        return inventoryRepository.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        Inventory::getInventoryCategoryName,
+                        Collectors.summingInt(Inventory::getInventoryAmount)
+                ));
     }
 
     private void checkAlertThreshold(String category) {
@@ -109,5 +110,4 @@ public class InventoryService {
             alertService.triggerLowInventoryAlert(category, total);
         }
     }
-    
 }

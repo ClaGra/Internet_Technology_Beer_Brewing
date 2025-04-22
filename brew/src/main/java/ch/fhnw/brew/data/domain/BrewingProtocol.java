@@ -15,7 +15,6 @@ public class BrewingProtocol {
     private Date brewingDate;
 
     private Float originalGravity;
-    private Float finalGravity;
 
     private String fermentationTankNumber;
     private Float fermentationTankTemperature;
@@ -37,9 +36,9 @@ public class BrewingProtocol {
     private Float temperatureMashOut;
     private Float temperatureMashIn;
 
-    private Float waterMainCast;
-    private Float waterSparge1;
-    private Float waterSparge2;
+    private Float waterQuantityMainCast;
+    private Float waterQuantitySparge1;
+    private Float waterQuantitySparge2;
 
     private String furtherAdditionType;
     private Float furtherAdditionAmount;
@@ -74,13 +73,6 @@ public class BrewingProtocol {
         this.originalGravity = originalGravity;
     }
 
-    public Float getFinalGravity() {
-        return finalGravity;
-    }
-
-    public void setFinalGravity(Float finalGravity) {
-        this.finalGravity = finalGravity;
-    }
 
     public String getFermentationTankNumber() {
         return fermentationTankNumber;
@@ -194,28 +186,28 @@ public class BrewingProtocol {
         this.temperatureMashIn = temperatureMashIn;
     }
 
-    public Float getWaterMainCast() {
-        return waterMainCast;
+    public Float getWaterQuantityMainCast() {
+        return waterQuantityMainCast;
     }
 
-    public void setWaterMainCast(Float waterMainCast) {
-        this.waterMainCast = waterMainCast;
+    public void setWaterQuantityMainCast(Float waterQuantityMainCast) {
+        this.waterQuantityMainCast = waterQuantityMainCast;
     }
 
-    public Float getWaterSparge1() {
-        return waterSparge1;
+    public Float getWaterQuantitySparge1() {
+        return waterQuantitySparge1;
     }
 
-    public void setWaterSparge1(Float waterSparge1) {
-        this.waterSparge1 = waterSparge1;
+    public void setWaterQuantitySparge1(Float waterQuantitySparge1) {
+        this.waterQuantitySparge1 = waterQuantitySparge1;
     }
 
-    public Float getWaterSparge2() {
-        return waterSparge2;
+    public Float getWaterQuantitySparge2() {
+        return waterQuantitySparge2;
     }
 
-    public void setWaterSparge2(Float waterSparge2) {
-        this.waterSparge2 = waterSparge2;
+    public void setWaterQuantitySparge2(Float waterQuantitySparge2) {
+        this.waterQuantitySparge2 = waterQuantitySparge2;
     }
 
     public String getFurtherAdditionType() {

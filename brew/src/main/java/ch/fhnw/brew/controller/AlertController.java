@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/alerts")
@@ -16,31 +17,23 @@ public class AlertController {
     private AlertService alertService;
 
     @PostMapping
-    public ResponseEntity<?> addAlert(@RequestBody Alert alert) {
+    public ResponseEntity<Alert> addAlert(@RequestBody Alert alert) {
         return ResponseEntity.ok(alertService.addAlert(alert));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAlert(@PathVariable Integer id) {
-        try {
-            alertService.deleteAlert(id);
-            return ResponseEntity.ok("Alert deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Map<String, String>> deleteAlert(@PathVariable Integer id) {
+        alertService.deleteAlert(id);
+        return ResponseEntity.ok(Map.of("message", "Alert deleted successfully"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAlert(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(alertService.getAlert(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Alert> getAlert(@PathVariable Integer id) {
+        return ResponseEntity.ok(alertService.getAlert(id));
     }
 
     @GetMapping
-    public List<Alert> getAllAlerts() {
-        return alertService.getAllAlerts();
+    public ResponseEntity<List<Alert>> getAllAlerts() {
+        return ResponseEntity.ok(alertService.getAllAlerts());
     }
 }

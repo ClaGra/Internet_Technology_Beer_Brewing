@@ -1,7 +1,9 @@
 package ch.fhnw.brew.data.domain;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import jakarta.validation.Valid;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -12,17 +14,15 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderID;
 
-    @Temporal(TemporalType.DATE)
-    private Date orderDate;
-
-    private String beerName;
-    private Integer amount;
+    private LocalDate orderDate;
 
     @ManyToOne
     private Customer customer;
 
     @ElementCollection
-    private List<Integer> batchNumbers;
+    @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
+    @Valid
+    private List<OrderItem> items;
 
     public Integer getOrderID() {
         return orderID;
@@ -32,28 +32,12 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public String getBeerName() {
-        return beerName;
-    }
-
-    public void setBeerName(String beerName) {
-        this.beerName = beerName;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
     }
 
     public Customer getCustomer() {
@@ -64,11 +48,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public List<Integer> getBatchNumbers() {
-        return batchNumbers;
+    public List<OrderItem> getItems() {
+        return items;
     }
 
-    public void setBatchNumbers(List<Integer> batchNumbers) {
-        this.batchNumbers = batchNumbers;
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
     }
 }

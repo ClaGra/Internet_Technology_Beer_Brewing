@@ -18,6 +18,7 @@ public class Bottling {
     private Date expirationDate;
 
     private Integer amount;
+    private Float finalGravity;
 
     @ManyToOne
     private BrewingProtocol brewingProtocol;
@@ -38,6 +39,14 @@ public class Bottling {
 
     public void setBottlingDate(Date bottlingDate) {
         this.bottlingDate = bottlingDate;
+    }
+
+    public Float getFinalGravity() {
+        return finalGravity;
+    }
+
+    public void setFinalGravity(Float finalGravity) {
+        this.finalGravity = finalGravity;
     }
 
     public Date getExpirationDate() {
