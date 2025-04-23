@@ -13,9 +13,6 @@ public class Alert {
     private String alertName;
     private String alertTrigger;
 
-    @ManyToOne
-    private User user;
-
     public Integer getAlertID() {
         return alertID;
     }
@@ -38,13 +35,5 @@ public class Alert {
 
     public void setAlertTrigger(String alertTrigger) {
         this.alertTrigger = alertTrigger;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

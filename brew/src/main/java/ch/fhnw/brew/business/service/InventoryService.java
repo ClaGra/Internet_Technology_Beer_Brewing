@@ -21,7 +21,7 @@ public class InventoryService {
 
     public Inventory addInventory(Inventory inventory) {
         Inventory saved = inventoryRepository.save(inventory);
-        checkAlertThreshold(saved.getInventoryCategoryName());
+        triggerAlertIfBelowThreshold(inventory.getInventoryCategoryName());
         return saved;
     }
 
@@ -29,13 +29,17 @@ public class InventoryService {
         Inventory existing = inventoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Inventory not found"));
 
+        String category = existing.getInventoryCategoryName();
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
+
         existing.setInventoryAmount(updated.getInventoryAmount());
         existing.setInventoryCategoryName(updated.getInventoryCategoryName());
         existing.setBatchNr(updated.getBatchNr());
         existing.setExpirationDate(updated.getExpirationDate());
 
         Inventory saved = inventoryRepository.save(existing);
-        checkAlertThreshold(saved.getInventoryCategoryName());
+        triggerAlertIfBelowThreshold(category, totalBefore);
+
         return saved;
     }
 
@@ -43,8 +47,11 @@ public class InventoryService {
         Inventory existing = inventoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Inventory not found"));
 
+        String category = existing.getInventoryCategoryName();
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
+
         inventoryRepository.delete(existing);
-        checkAlertThreshold(existing.getInventoryCategoryName());
+        triggerAlertIfBelowThreshold(category, totalBefore);
     }
 
     public Inventory getInventory(Integer id) {
@@ -63,6 +70,8 @@ public class InventoryService {
                 .max(Comparator.comparing(Inventory::getInventoryID))
                 .orElse(null);
 
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
+
         Inventory target = (latest != null) ? latest : new Inventory();
         target.setInventoryCategoryName(category);
         target.setInventoryAmount(Optional.ofNullable(target.getInventoryAmount()).orElse(0) + change);
@@ -72,7 +81,7 @@ public class InventoryService {
         }
 
         Inventory saved = inventoryRepository.save(target);
-        checkAlertThreshold(category);
+        triggerAlertIfBelowThreshold(category, totalBefore);
         return saved;
     }
 
@@ -84,15 +93,17 @@ public class InventoryService {
         inventory.setExpirationDate(bottling.getExpirationDate());
 
         Inventory saved = inventoryRepository.save(inventory);
-        checkAlertThreshold(inventory.getInventoryCategoryName());
+        triggerAlertIfBelowThreshold(inventory.getInventoryCategoryName());
         return saved;
     }
 
     public void removeInventoryForBatch(Integer batchNr) {
         List<Inventory> toRemove = inventoryRepository.findByBatchNr(batchNr);
         for (Inventory i : toRemove) {
+            String category = i.getInventoryCategoryName();
+            int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
             inventoryRepository.delete(i);
-            checkAlertThreshold(i.getInventoryCategoryName());
+            triggerAlertIfBelowThreshold(category, totalBefore);
         }
     }
 
@@ -104,10 +115,17 @@ public class InventoryService {
                 ));
     }
 
-    private void checkAlertThreshold(String category) {
+    private void triggerAlertIfBelowThreshold(String category) {
         int total = getTotalInventoryByCategory().getOrDefault(category, 0);
         if (total < 72) {
             alertService.triggerLowInventoryAlert(category, total);
+        }
+    }
+
+    private void triggerAlertIfBelowThreshold(String category, int totalBefore) {
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        if (totalBefore >= 72 && totalAfter < 72) {
+            alertService.triggerLowInventoryAlert(category, totalAfter);
         }
     }
 }

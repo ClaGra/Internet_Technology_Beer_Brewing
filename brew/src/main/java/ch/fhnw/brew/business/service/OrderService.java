@@ -27,19 +27,21 @@ public class OrderService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private AlertService alertService;
+
     public Order addOrder(Order order) {
         order.setOrderDate(LocalDate.now());
 
-        // Load full customer data
+        // Load full customer details
         Integer customerId = order.getCustomer().getCustomerID();
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException("Customer not found"));
         order.setCustomer(customer);
 
-        // Pre-check stock availability for all items first
+        // Check availability before deducting
         for (OrderItem item : order.getItems()) {
             int requested = item.getAmount();
-
             int totalAvailable = inventoryRepository.findByInventoryCategoryName(item.getBeerName()).stream()
                     .mapToInt(Inventory::getInventoryAmount)
                     .sum();
@@ -49,7 +51,6 @@ public class OrderService {
             }
         }
 
-        // If all items can be fulfilled, deduct stock and split per batch
         List<OrderItem> processedItems = new ArrayList<>();
 
         for (OrderItem item : order.getItems()) {
@@ -57,27 +58,37 @@ public class OrderService {
 
             List<Inventory> available = inventoryRepository.findByInventoryCategoryName(item.getBeerName())
                     .stream()
-                    .filter(inv -> inv.getInventoryAmount() > 0)
                     .sorted(Comparator.comparing(Inventory::getExpirationDate))
                     .collect(Collectors.toList());
 
             for (Inventory inv : available) {
                 if (remaining <= 0) break;
 
-                int take = Math.min(remaining, inv.getInventoryAmount());
-                inv.setInventoryAmount(inv.getInventoryAmount() - take);
-                inventoryRepository.save(inv);
+                int availableAmount = inv.getInventoryAmount();
+                int take = Math.min(remaining, availableAmount);
 
-                // Skip if we ended up taking 0
-                if (take <= 0) continue;
+                if (take > 0) {
+                    inv.setInventoryAmount(availableAmount - take);
+                    inventoryRepository.save(inv);
 
-                OrderItem splitItem = new OrderItem();
-                splitItem.setBeerName(item.getBeerName());
-                splitItem.setAmount(take);
-                splitItem.setBatchNumber(inv.getBatchNr());
+                    OrderItem splitItem = new OrderItem();
+                    splitItem.setBeerName(item.getBeerName());
+                    splitItem.setAmount(take);
+                    splitItem.setBatchNumber(inv.getBatchNr());
 
-                processedItems.add(splitItem);
-                remaining -= take;
+                    processedItems.add(splitItem);
+                    remaining -= take;
+                }
+            }
+
+            // Trigger alert after each item is processed
+            int totalRemaining = inventoryRepository.findByInventoryCategoryName(item.getBeerName())
+                    .stream()
+                    .mapToInt(Inventory::getInventoryAmount)
+                    .sum();
+
+            if (totalRemaining < 72) {
+                alertService.triggerLowInventoryAlert(item.getBeerName(), totalRemaining);
             }
         }
 
@@ -89,7 +100,7 @@ public class OrderService {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
-        // Restore previously deducted inventory
+        // Restore previous inventory
         for (OrderItem item : existing.getItems()) {
             List<Inventory> matching = inventoryRepository.findByBatchNr(item.getBatchNumber());
             for (Inventory inv : matching) {
@@ -107,7 +118,6 @@ public class OrderService {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
-        // Restore inventory for deleted order
         for (OrderItem item : existing.getItems()) {
             List<Inventory> matching = inventoryRepository.findByBatchNr(item.getBatchNumber());
             for (Inventory inv : matching) {
