@@ -20,7 +20,6 @@ public class BrewingApplication {
     @Autowired private RecipeService recipeService;
     @Autowired private BrewingProtocolService brewingProtocolService;
     @Autowired private BottlingService bottlingService;
-    @Autowired private InventoryService inventoryService;
     @Autowired private CustomerService customerService;
     @Autowired private OrderService orderService;
 
