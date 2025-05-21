@@ -5,6 +5,7 @@ import ch.fhnw.brew.data.domain.Inventory;
 import ch.fhnw.brew.data.repository.InventoryRepository;
 import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -43,6 +44,7 @@ public class InventoryService {
         return saved;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteInventory(Integer id) {
         Inventory existing = inventoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Inventory not found"));

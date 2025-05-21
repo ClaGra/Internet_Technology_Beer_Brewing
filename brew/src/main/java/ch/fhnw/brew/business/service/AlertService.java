@@ -4,6 +4,7 @@ import ch.fhnw.brew.data.domain.Alert;
 import ch.fhnw.brew.data.repository.AlertRepository;
 import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteAlert(Integer id) {
         Alert existing = alertRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Alert not found"));

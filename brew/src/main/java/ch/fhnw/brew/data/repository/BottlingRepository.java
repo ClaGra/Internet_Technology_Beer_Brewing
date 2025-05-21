@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BottlingRepository extends JpaRepository<Bottling, Integer> {
+    boolean existsByBrewingProtocolBatchNr(Integer batchNr);
 }

@@ -9,7 +9,9 @@ import ch.fhnw.brew.data.repository.InventoryRepository;
 import ch.fhnw.brew.data.repository.OrderRepository;
 import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -30,6 +32,7 @@ public class OrderService {
     @Autowired
     private AlertService alertService;
 
+    @Transactional
     public Order addOrder(Order order) {
         order.setOrderDate(LocalDate.now());
 
@@ -96,6 +99,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order editOrder(Integer id, Order updatedOrder) {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
@@ -111,9 +115,11 @@ public class OrderService {
 
         updatedOrder.setOrderID(existing.getOrderID());
         updatedOrder.setOrderDate(existing.getOrderDate());
-        return addOrder(updatedOrder);
+        return addOrder(updatedOrder); // Triggers transactional addOrder again
     }
 
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteOrder(Integer id) {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));

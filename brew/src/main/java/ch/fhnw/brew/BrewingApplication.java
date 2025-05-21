@@ -87,7 +87,7 @@ public class BrewingApplication {
         Bottling ipaBottling = new Bottling();
         ipaBottling.setBottlingDate(java.sql.Date.valueOf(LocalDate.now()));
         ipaBottling.setAmount(100);
-        ipaBottling.setFinalGravity(1.012f); // <-- Set Final Gravity
+        ipaBottling.setFinalGravity(1.012f); 
         ipaBottling.setBrewingProtocol(ipaProtocol);
         bottlingService.addBottling(ipaBottling);
 
@@ -95,7 +95,7 @@ public class BrewingApplication {
         Bottling lagerBottling = new Bottling();
         lagerBottling.setBottlingDate(java.sql.Date.valueOf(LocalDate.now()));
         lagerBottling.setAmount(80);
-        lagerBottling.setFinalGravity(1.008f); // <-- Set Final Gravity
+        lagerBottling.setFinalGravity(1.008f); 
         lagerBottling.setBrewingProtocol(lagerProtocol);
         bottlingService.addBottling(lagerBottling);
 

@@ -3,9 +3,11 @@ package ch.fhnw.brew.business.service;
 import ch.fhnw.brew.data.domain.BrewingProtocol;
 import ch.fhnw.brew.data.domain.Recipe;
 import ch.fhnw.brew.data.repository.BrewingProtocolRepository;
+import ch.fhnw.brew.data.repository.BottlingRepository;
 import ch.fhnw.brew.data.repository.RecipeRepository;
 import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +21,13 @@ public class BrewingProtocolService {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private BottlingRepository bottlingRepository;
+
     public BrewingProtocol addBrewingProtocol(BrewingProtocol protocol) {
-        // Load the full Recipe object by ID before saving
         Integer recipeId = protocol.getRecipe().getRecipeID();
         Recipe fullRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new NotFoundException("Recipe not found with ID: " + recipeId));
-
         protocol.setRecipe(fullRecipe);
         return brewingProtocolRepository.save(protocol);
     }
@@ -56,7 +59,6 @@ public class BrewingProtocolService {
         existing.setFurtherAdditionAmount(updated.getFurtherAdditionAmount());
         existing.setFurtherAdditionTime(updated.getFurtherAdditionTime());
 
-        // Replace with full recipe from DB
         Integer recipeId = updated.getRecipe().getRecipeID();
         Recipe fullRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new NotFoundException("Recipe not found with ID: " + recipeId));
@@ -65,12 +67,21 @@ public class BrewingProtocolService {
         return brewingProtocolRepository.save(existing);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteBrewingProtocol(Integer id) {
-        if (!brewingProtocolRepository.existsById(id)) {
-            throw new NotFoundException("Brewing Protocol does not exist");
+        BrewingProtocol protocol = brewingProtocolRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Brewing Protocol does not exist"));
+
+        Integer batchNr = protocol.getBatchNr(); // Correct value to check bottling linkage
+
+        boolean isUsedInBottling = bottlingRepository.existsByBrewingProtocolBatchNr(batchNr);
+        if (isUsedInBottling) {
+            throw new IllegalStateException("Brewing Protocol cannot be deleted because it is referenced in bottling");
         }
+
         brewingProtocolRepository.deleteById(id);
     }
+
 
     public BrewingProtocol getBrewingProtocol(Integer id) {
         return brewingProtocolRepository.findById(id)
