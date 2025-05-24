@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlertRepository extends JpaRepository<Alert, Integer> {
+    boolean existsByAlertTriggerStartingWith(String prefix);
+    void deleteByAlertTriggerStartingWith(String prefix);
 }

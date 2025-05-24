@@ -2,10 +2,9 @@ package ch.fhnw.brew.business.service;
 
 import ch.fhnw.brew.data.domain.Alert;
 import ch.fhnw.brew.data.repository.AlertRepository;
-import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,30 +14,33 @@ public class AlertService {
     @Autowired
     private AlertRepository alertRepository;
 
-    public Alert addAlert(Alert alert) {
-        return alertRepository.save(alert);
+    public void triggerLowInventoryAlert(String category, int currentAmount) {
+        String keywordPrefix = "Inventory for " + category + " is below threshold";
+
+        boolean exists = alertRepository.existsByAlertTriggerStartingWith(keywordPrefix);
+
+        if (!exists) {
+            Alert alert = new Alert();
+            alert.setAlertName("Low Inventory");
+            alert.setAlertTrigger(keywordPrefix + ": " + currentAmount + " units.");
+            alertRepository.save(alert);
+        }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteAlert(Integer id) {
-        Alert existing = alertRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Alert not found"));
-        alertRepository.delete(existing);
+    @Transactional
+    public void resolveAlertIfRecovered(String category, int currentAmount) {
+        if (currentAmount >= 72) {
+            String keywordPrefix = "Inventory for " + category + " is below threshold";
+            alertRepository.deleteByAlertTriggerStartingWith(keywordPrefix);
+        }
     }
 
-    public Alert getAlert(Integer id) {
-        return alertRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Alert not found"));
-    }
-
-    public List<Alert> getAllAlerts() {
+    public List<Alert> getOpenAlerts() {
         return alertRepository.findAll();
     }
 
-    public void triggerLowInventoryAlert(String category, int currentAmount) {
-        Alert alert = new Alert();
-        alert.setAlertName("Low Inventory");
-        alert.setAlertTrigger("Inventory for " + category + " is below threshold: " + currentAmount + " units.");
-        alertRepository.save(alert);
+    @Transactional
+    public void deleteAlert(Integer id) {
+        alertRepository.deleteById(id);
     }
 }

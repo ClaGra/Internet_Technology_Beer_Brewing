@@ -21,8 +21,10 @@ public class InventoryService {
     private AlertService alertService;
 
     public Inventory addInventory(Inventory inventory) {
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(inventory.getInventoryCategoryName(), 0);
         Inventory saved = inventoryRepository.save(inventory);
-        triggerAlertIfBelowThreshold(inventory.getInventoryCategoryName());
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(inventory.getInventoryCategoryName(), 0);
+        handleThresholdChange(inventory.getInventoryCategoryName(), totalBefore, totalAfter);
         return saved;
     }
 
@@ -39,8 +41,8 @@ public class InventoryService {
         existing.setExpirationDate(updated.getExpirationDate());
 
         Inventory saved = inventoryRepository.save(existing);
-        triggerAlertIfBelowThreshold(category, totalBefore);
-
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(updated.getInventoryCategoryName(), 0);
+        handleThresholdChange(updated.getInventoryCategoryName(), totalBefore, totalAfter);
         return saved;
     }
 
@@ -53,7 +55,9 @@ public class InventoryService {
         int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
 
         inventoryRepository.delete(existing);
-        triggerAlertIfBelowThreshold(category, totalBefore);
+
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        handleThresholdChange(category, totalBefore, totalAfter);
     }
 
     public Inventory getInventory(Integer id) {
@@ -67,7 +71,6 @@ public class InventoryService {
 
     public Inventory updateInventoryAmount(String category, int change) {
         List<Inventory> inventories = inventoryRepository.findByInventoryCategoryName(category);
-
         Inventory latest = inventories.stream()
                 .max(Comparator.comparing(Inventory::getInventoryID))
                 .orElse(null);
@@ -83,19 +86,24 @@ public class InventoryService {
         }
 
         Inventory saved = inventoryRepository.save(target);
-        triggerAlertIfBelowThreshold(category, totalBefore);
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        handleThresholdChange(category, totalBefore, totalAfter);
         return saved;
     }
 
     public Inventory addInventoryFromBottling(Bottling bottling) {
+        String category = bottling.getBrewingProtocol().getRecipe().getRecipeName();
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
+
         Inventory inventory = new Inventory();
-        inventory.setInventoryCategoryName(bottling.getBrewingProtocol().getRecipe().getRecipeName());
+        inventory.setInventoryCategoryName(category);
         inventory.setInventoryAmount(bottling.getAmount());
         inventory.setBatchNr(bottling.getBrewingProtocol().getBatchNr());
         inventory.setExpirationDate(bottling.getExpirationDate());
 
         Inventory saved = inventoryRepository.save(inventory);
-        triggerAlertIfBelowThreshold(inventory.getInventoryCategoryName());
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        handleThresholdChange(category, totalBefore, totalAfter);
         return saved;
     }
 
@@ -105,7 +113,8 @@ public class InventoryService {
             String category = i.getInventoryCategoryName();
             int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
             inventoryRepository.delete(i);
-            triggerAlertIfBelowThreshold(category, totalBefore);
+            int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+            handleThresholdChange(category, totalBefore, totalAfter);
         }
     }
 
@@ -117,17 +126,11 @@ public class InventoryService {
                 ));
     }
 
-    private void triggerAlertIfBelowThreshold(String category) {
-        int total = getTotalInventoryByCategory().getOrDefault(category, 0);
-        if (total < 72) {
-            alertService.triggerLowInventoryAlert(category, total);
-        }
-    }
-
-    private void triggerAlertIfBelowThreshold(String category, int totalBefore) {
-        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+    private void handleThresholdChange(String category, int totalBefore, int totalAfter) {
         if (totalBefore >= 72 && totalAfter < 72) {
             alertService.triggerLowInventoryAlert(category, totalAfter);
+        } else if (totalBefore < 72 && totalAfter >= 72) {
+            alertService.resolveAlertIfRecovered(category, totalAfter);
         }
     }
 }

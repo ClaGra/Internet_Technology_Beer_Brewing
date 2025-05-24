@@ -42,14 +42,6 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getAllInventories());
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<Inventory> updateInventoryAmount(
-            @RequestParam String category,
-            @RequestParam int amount
-    ) {
-        return ResponseEntity.ok(inventoryService.updateInventoryAmount(category, amount));
-    }
-
     @GetMapping("/summary")
     public ResponseEntity<Map<String, Integer>> getInventorySummary() {
         return ResponseEntity.ok(inventoryService.getTotalInventoryByCategory());

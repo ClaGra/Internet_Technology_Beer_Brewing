@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/alerts")
@@ -16,24 +15,18 @@ public class AlertController {
     @Autowired
     private AlertService alertService;
 
-    @PostMapping
-    public ResponseEntity<Alert> addAlert(@RequestBody Alert alert) {
-        return ResponseEntity.ok(alertService.addAlert(alert));
+    @GetMapping
+    public ResponseEntity<List<Alert>> getOpenAlerts() {
+        List<Alert> openAlerts = alertService.getOpenAlerts();
+        if (openAlerts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(openAlerts);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteAlert(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteAlert(@PathVariable Integer id) {
         alertService.deleteAlert(id);
-        return ResponseEntity.ok(Map.of("message", "Alert deleted successfully"));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Alert> getAlert(@PathVariable Integer id) {
-        return ResponseEntity.ok(alertService.getAlert(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Alert>> getAllAlerts() {
-        return ResponseEntity.ok(alertService.getAllAlerts());
+        return ResponseEntity.noContent().build();
     }
 }
