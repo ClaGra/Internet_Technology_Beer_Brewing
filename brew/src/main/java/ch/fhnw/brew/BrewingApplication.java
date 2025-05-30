@@ -39,7 +39,7 @@ public class BrewingApplication {
         customer1.setCity("Zurich");
         customer1.setEmail("anna@example.com");
         customer1.setPhone("0781234567");
-        customer1.setGender("Female");
+        customer1.setGender(Gender.FEMALE);
         customerService.addCustomer(customer1);
 
         Customer customer2 = new Customer();
@@ -51,7 +51,7 @@ public class BrewingApplication {
         customer2.setCity("Basel");
         customer2.setEmail("ben.h@example.com");
         customer2.setPhone("0797654321");
-        customer2.setGender("Male");
+        customer2.setGender(Gender.MALE);
         customerService.addCustomer(customer2);
 
         Customer customer3 = new Customer();
@@ -63,7 +63,7 @@ public class BrewingApplication {
         customer3.setCity("Bern");
         customer3.setEmail("lina.m@example.com");
         customer3.setPhone("0766543210");
-        customer3.setGender("Female");
+        customer3.setGender(Gender.OTHER);
         customerService.addCustomer(customer3);
 
 

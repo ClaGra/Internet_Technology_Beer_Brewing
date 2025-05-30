@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -22,6 +24,7 @@ public class Customer {
     private String lastName;
 
     @Past(message = "Date of birth must be in the past")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     private String street;
@@ -37,7 +40,9 @@ public class Customer {
     @Pattern(regexp = "^(\\+41|0)[0-9]{9}$", message = "Phone must be a valid Swiss number")
     private String phone;
 
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
 
     public Integer getCustomerID() {
         return customerID;
@@ -112,11 +117,12 @@ public class Customer {
         this.phone = phone;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
+
 }
