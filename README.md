@@ -36,13 +36,12 @@ The Excel sheet does not give any insights about specific customers or their ord
 ### User Stories
 
 #### User Stories General
-1. As an Admin, I want to have a Web app to use on different mobile devices and desktop computers.
-2. As an Admin, I want to see a consistent visual appearance to navigate easily, and it should look consistent.
-3. As an Admin, I want to use list views to explore and read my business data.
-4. As an Admin, I want to use edit and create views to maintain my business data.
-5. As an Admin, I want to log-in so that I can authenticate myself.
-6. As a User, I want to use list views so that I can access public pages.
-7. (Optional) As a User, I want to authenticate myself so that I can read my personal and confidential data.
+1. As a User, I want to have a Web app to use on different mobile devices and desktop computers.
+2. As a User, I want to see a consistent visual appearance to navigate easily, and it should look consistent.
+3. As a User, I want to use list views to explore and read my business data.
+4. As a User, I want to use edit and create views to maintain my business data.
+5. As a User, I want to log-in so that I can authenticate myself.
+6. As an Admin, I want to authenticate myself so that I can delete data.
 
 #### User Stories Administration
 1. As a Head of Administration, I want to add user accounts so that I can grant access to new users.
@@ -52,50 +51,112 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to log out so that I can securely end my session.
 
 #### User Stories Inventory
-1. As a User, I want to add inventory so that I can keep track of new stock.
-2. As a User, I want to edit inventory so that I can update inventory details.
-3. As a Head of Administration, I want to delete inventory so that I can remove outdated or incorrect stock entries.
+1. As a User, I want to manually add new inventory items so that I can track stock entries.
+2. As a System, I want to automatically add inventory after brewing or bottling so that the stock stays accurate.
+3. As a User, I want to edit inventory items so that I can correct stock data.
+4. As a System, I want to automatically adjust inventory after an order so that real-time stock levels are maintained.
+5. As an Admin, I want to delete inventory items so that I can clean up invalid entries.
+6. As a user, I want to view the full inventory so that I understand current stock levels.
+7. As a user, I want to view inventory by ID so that I can find specific items quickly.
+8. As a user, I want to view an inventory summary so that I can get an overview of stock categories
 
-#### User Stories Brewing & Bottling
-1. As a User, I want to add a brewing protocol so that I can document new brewing processes.
-2. As a User, I want to edit brewing protocols so that I can update brewing process details.
-3. As a Head of Administration, I want to delete brewing protocols so that I can remove outdated or incorrect processes.
-4. As a User, I want to add bottling information so that I can record packaging details.
-5. As a User, I want to edit bottling records so that I can update packaging information.
-6. As a Head of Administration, I want to delete bottling records so that I can remove incorrect or outdated packaging data.
-7. As a User, I want to view brewing protocols so that I can understand the brewing processes.
-8. As a User, I want to query brewing and bottling information so that I can get insights into production data.
+#### User Stories Brewing 
+1. As an Admin, I want to add new brewing protocols so that brewing processes are documented.
+2. As a User, I want to edit brewing protocols so that I can update brewing information.
+3. As an Admin, I want to delete brewing protocols so that I can remove outdated data.
+4. As a User, I want to view brewing protocols so that I can understand the production process.
+5. As a User, I want to view brewing protocols by ID so that I can reference specific batches.
+
+
+#### User Stories Bottoling 
+1. As a User, I want to add bottling records so that packaging is documented.
+2. As a User, I want to edit bottling records so that I can update packaging information.
+3. As an Admin, I want to delete bottling records so that I can clean up errors.
+4. As a User, I want to view bottling records so that I can see packaging status.
+5. As a User, I want to view bottling records by ID so that I can look up specific batches.
+
+#### User Stories Customer 
+1. As an Admin, I want to add new customers so that I can manage client information.
+2. As a User, I want to edit customer data so that I can keep records accurate.
+3. As an Admin, I want to delete customers so that I can remove outdated contacts.
+4. As a User, I want to view all customers so that I can see our client base.
+5. As a User, I want to view customers by ID so that I can quickly locate someone.
+
+#### User Stories Recipe 
+1. As an Admin, I want to add new recipes so that we can document brewing formulas.
+2. As a User, I want to edit recipes so that I can update brewing instructions.
+3. As an Admin, I want to delete recipes so that I can remove unused ones.
+4. As a User, I want to view all recipes so that I can follow brewing guidelines.
+5. As a User, I want to view recipes by ID so that I can access specific details.
+
+#### User Stories Alert 
+1. As a System, I want to automatically add an alert when inventory is low so that admins are notified in time.
+2. As an Admin, I want to delete alerts so that I can manage and clear notifications.
+3. As a System, I want to automatically delete alerts when inventory is replenished so that only relevant alerts remain.
+
 
 ### Use Case
 
-#### Use Case 100 Administration
-![image](https://github.com/user-attachments/assets/b96bf3f3-9f86-48a2-ae54-d099608180a2)
- 
-- UC-101 [Add User Account]: The system shall allow the head of administration to create a new user account
-- UC-102 [Edit User Account]: The system shall allow the user to edit their account
-- UC-103 [Delete User Account]: The system shall allow the head of administration to delete a user account
-- UC-104 [User Login]: The system shall allow the user to log in
-- UC-105 [User Logout]: The system shall allow the user to log out
+#### Use Case 100 General
+![image](https://github.com/user-attachments/assets/02af40b1-dbaa-4138-a27a-914c35b16af3)
+
+- UC-101 [Login]: The system shall allow both the admin and the user to log in.
+- UC-102 [Create Views]: The system shall allow both the admin and the user to create new views.
+- UC-103 [Edit Views]: The system shall allow both the admin and the user to edit existing views.
+- UC-104 [Read Views]: The system shall allow both the admin and the user to read views.
+- UC-105 [Delete Views Logout]: The system shall allow the admin to delete views.
 
 #### Use Case 200 Inventory
-![image](https://github.com/user-attachments/assets/6575f187-2fba-4dbe-9645-527392fbd26a)
+![image](https://github.com/user-attachments/assets/a71acacd-768a-4acd-bd23-ee32c32ede8e)
 
-- UC-201 [Add Inventory]: The system shall allow the user to add inventory
-- UC-202 [Edit Inventory]: The system shall allow the user to edit previously entered
-inventory
-- UC-203 [Delete Inventory]: The system shall allow the head of administration to delete previously recorded inventory
+- UC-201 [Add Inventory]: The system shall allow both the admin and the user to manually add new inventory items. Additionally, the system shall automatically update the inventory based on newly created brewing protocols and bottling records.
+- UC-202 [Edit Inventory]: The system shall allow both the admin and the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
+- UC-203 [Delete Inventory]: The system shall allow the admin to delete inventory items.
+- UC-204 [View Inventory]: The system shall allow both the admin and the user to view the inventory.
+- UC-205 [View Inventory by ID]: The system shall allow both the admin and the user to view the inventory sorted by ID.
+- UC-206 [View Inventory Summary]: The system shall allow both the admin and the user to view the inventory summary.
 
-#### Use Case 300 Brewing & Bottling
-![image](https://github.com/user-attachments/assets/7db469ff-2f65-480d-a896-c7aaa941a372)
+#### Use Case 300 Brewing
+![image](https://github.com/user-attachments/assets/bb617d79-2072-4987-a8fa-5fc7c40e35be)
 
-- UC-301 [Add Brewing Protocol]: The system shall allow the user to create a brewing protocol  
-- UC-302 [Edit Brewing Protocol]: The system shall allow the user to edit an existing brewing protocol 
-- UC-303 [Delete Brewing Protocol]: The system shall allow the head of administration to delete an existing brewing protocol  
-- UC-304 [Add Bottling]: The system shall allow the user to register a new bottling process
-- UC-305 [ Edit Bottling]: The system shall allow the user to edit an existing bottling process
-- UC-306 [Delete Bottling]: The system shall allow the user to delete an existing bottling process
-- UC-307 [Viewing Brewing Bottling]: The system shall allow the user to view the brewing protocol in its current state 
-- UC-308 [Query Brewing & Bottling]: The system shall allow the user to query a report of the brewing and bottling for taxes
+- UC-301 [Add Brewing Protocol]: The system shall allow the admin to add a new brewing protocol.
+- UC-302 [Edit Brewing Protocol]: The system shall allow both the admin and the user to edit an existing brewing protocol.
+- UC-303 [Delete Brewing Protocol]: The system shall allow the admin to delete a brewing protocol.
+- UC-304 [View Brewing Protocol]: The system shall allow both the admin and the user to view brewing protocols.
+- UC-305 [View Brewing Protocol by ID]: The system shall allow both the admin and the user to view brewing protocols sorted by ID.
+
+#### Use Case 400 Bottoling
+![image](https://github.com/user-attachments/assets/eb40a4e3-d665-4c8d-86f9-0fead5d03b04)
+
+- UC-401 [Add Bottling]: The system shall allow both the admin and the user to add a new bottling record.
+- UC-402 [Edit Bottling]: The system shall allow both the admin and the user to edit an existing bottling record.
+- UC-403 [Delete Bottling]: The system shall allow the admin to delete a bottling record.
+- UC-404 [View Bottling]: The system shall allow both the admin and the user to view bottling information.
+- UC-405 [View Bottling by ID]: The system shall allow both the admin and the user to view bottling information sorted by ID.
+
+#### Use Case 500 Customerg
+![image](https://github.com/user-attachments/assets/b3757710-eba2-4cf8-858b-9916f562a3f4)
+
+- UC-501 [Add Customer]: The system shall allow the admin to add a new customer.
+- UC-502 [Edit Customer]: The system shall allow both the admin and the user to edit an existing customer.
+- UC-503 [Delete Customer]: The system shall allow the admin to delete a customer.
+- UC-504 [View Customer]: The system shall allow both the admin and the user to view customer information.
+- UC-505 [View Customer by ID]: The system shall allow both the admin and the user to view customer information sorted by ID.
+
+#### Use Case 600 Recipe
+![image](https://github.com/user-attachments/assets/534a3e3f-0072-4254-aac4-b410271269b7)
+
+- UC-601 [Add Recipe]: The system shall allow the admin to add a new recipe.
+- UC-602 [Edit Recipe]: The system shall allow both the admin and the user to edit an existing recipe.
+- UC-603 [Delete Recipe]: The system shall allow the admin to delete a recipe.
+- UC-604 [View Recipe]: The system shall allow both the admin and the user to view recipe information.
+- UC-605 [View Recipe by ID]: The system shall allow both the admin and the user to view recipe information sorted by ID.
+
+#### Use Case 700 Alert
+![image](https://github.com/user-attachments/assets/7f038159-f956-49dc-9781-147108920a54)
+
+- UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72.
+- UC-702 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category is above 72. 
 
 
 ## Design
