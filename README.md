@@ -196,7 +196,7 @@ Starting from the home page, we can visit different pages. Available public page
 > 🚧: Provide a picture and describe your domain model; you may use Entity-Relationship Model or UML class diagram. Both can be created in Visual Paradigm - we have an academic license for it.
 
 ![image](https://github.com/user-attachments/assets/b8cebc80-d842-4b4f-9394-fb6e54898480)
-
+hmm
 ### Business Logic 
 > 🚧: Describe the business logic for **at least one business service** in detail. If available, show the expected path and HTPP method. The remaining documentation of APIs shall be made available in the swagger endpoint. The default Swagger UI page is available at /swagger-ui.html.
 
@@ -211,6 +211,26 @@ Based on the UC-4, there will be two offers and a standard offer. Given a locati
 **Param**: `value="location"` Admitted value: "Basel","Brugg".
 
 **Method:** `GET`
+
+### Business Logic 
+A key part of our application is the automatic adjustment of inventory and alert management, which ensures that stock levels are always monitored and visible in real-time — without manual tracking. The system reacts to business events such as orders and bottling, updating inventory levels accordingly and triggering or clearing alerts based on stock thresholds.
+
+**Logic Description**
+1. Orders reduce inventory: When a customer places an order, the system reduces the inventory quantity of each ordered item.
+
+2. Bottling increases inventory: When a batch is bottled, the finished product is added to the inventory, increasing its quantity.
+
+3. Alerts are automatically triggered or resolved: After each inventory update, the system checks whether the current quantity is below the critical threshold of 72 units (per category):
+- If the quantity falls below 72, an alert is automatically triggered.
+- If the quantity rises back to 72 or above, the corresponding alert is automatically resolved (deleted or marked inactive).
+
+Relevant API Endpoints
+| Action          | HTTP Method | Endpoint        | Triggered Logic                          |
+| --------------- | ----------- | --------------- | ---------------------------------------- |
+| Place Order     | POST        | `/api/orders`   | Decrease inventory, trigger alert if <72 |
+| Finish Bottling | POST        | `/api/bottling` | Increase inventory, clear alert if ≥72   |
+| View Alerts     | GET         | `/api/alerts`   | Display all active low-stock alerts      |
+
 
 ## Implementation
 > 🚧: Briefly describe your technology stack, which apps were used and for what.
@@ -251,6 +271,24 @@ Then, the following further dependencies have been added to the project `pom.xml
 > 🚧: Describe your views and what APIs is used on which view. If you don't have access to the Internet Technology class Budibase environment(https://inttech.budibase.app/), please write to Devid on MS teams.
 
 This Web application was developed using Budibase and it is available for preview at https://inttech.budibase.app/app/pizzeria. 
+
+This web application was developed using Budibase, a low-code platform for building internal tools. The frontend consists of multiple views, each connected to specific backend RESTful APIs implemented in Java using Spring Boot. These views allow users to interact with core features like brewing protocols, inventory management, and customer orders.
+
+The application is available for preview at:
+https://xxxx
+
+| View                 | Purpose                                    | HTTP Methods Used      | API Endpoint(s)              | Entity Used                |
+| -------------------- | ------------------------------------------ | ---------------------- | ---------------------------- | -------------------------- |
+| **Dashboard**        | Overview with recent alerts and orders     | GET                    | `/api/alerts`, `/api/orders` | `Alert`, `Order`           |
+| **Brewing Protocol** | Manage brewing procedures and steps        | GET, POST, PUT, DELETE | `/api/brewing-protocols`     | `BrewingProtocol`          |
+| **Recipes**          | Manage beer recipes                        | GET, POST, PUT, DELETE | `/api/recipes`               | `Recipe`, `RecipeCategory` |
+| **Inventory**        | Monitor and update stock levels            | GET, PUT               | `/api/inventory`             | `Inventory`                |
+| **Bottling**         | Document bottling steps and manage batches | POST, PUT              | `/api/bottling`              | `Bottling`                 |
+| **Orders**           | Create and view customer orders            | GET, POST              | `/api/orders`                | `Order`, `OrderItem`       |
+| **Customers**        | View and manage customer information       | GET, POST              | `/api/customers`             | `Customer`                 |
+| **Users**            | Manage user accounts and roles             | GET, POST, PUT         | `/api/users`                 | `User`, `Role`             |
+| **Alerts**           | View active system alerts                  | GET                    | `/api/alerts`                | `Alert`                    |
+
 
 ## Execution
 > 🚧: Please describe how to execute your app and what configurations must be changed to run it. 
