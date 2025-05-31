@@ -285,9 +285,37 @@ Alternatively, you can deploy your application to a free PaaS like [Render](http
 ## Project Management
 > 🚧: Include all the participants and briefly describe each of their **individual** contribution and/or roles. Screenshots/descriptions of your Kanban board or similar project management tools are welcome.
 
+The project of the web application for the Brauverein Full was developed collaboratively by a team of four. Roles and responsibilities were  divided, and the team coordinated progress through regular meetings and shared documentation.
+
 ### Roles
-- Back-end developer: 
-- Front-end developer: 
+- **Back-end developer: Claudia Graf, Soheyla Tofighi** 
+
+They implemented the backend logic using Spring Boot. They defined the core entities (e.g., BrewingProtocol, Recipe, Inventory, User) and developed RESTful endpoints to support the platform’s functionalities, such as managing brewing steps, orders, and alerts.
+
+- **Front-end developer: Soheyla Tofighi, Claudia Graf**
+
+They built the user interface using Budibase. They designed and connected frontend views to the backend services, enabling intuitive interaction with the system for different user roles.
+
+- **Documentation, Presentation & Project Coordinator: Tuangporn Siwaboon, Yannik Stöckli**
+
+They coordinated team meetings and responsibilities, ensured timely progress, and created the documentation (e.g., user stories, use cases, and this README). They also prepared and delivered the final presentation.
+
+- **Testing: Claudia Graf, Soheyla Tofighi, Tuangporn Siwaboon, Yannik Stöckli**
+
+The entire team contributed to testing by checking functionalities across the frontend and backend, verifying correct API behavior, UI consistency, and ensuring that all use cases were properly supported.
+
+
+### Task Overview
+
+| Task Area            | Responsible Person(s)             | Notes                                       |
+|----------------------|-----------------------------------|---------------------------------------------|
+| Backend endpoints     | Claudia, Soheyla                   | Defined core entities and logic             |
+| Frontend (UI)         | Soheyla, Claudia                   | Budibase implementation and testing         |
+| Documentation         | Yannik, Tuangporn                  | Use cases, user stories, README             |
+| Presentation slides   | Tuangporn, Yannik                  | Structure, content, and delivery            |
+| Manual Testing        | Everyone                           | Testing features during and after development |
+| Coordination          | Yannik, Tuangporn                  | Organized tasks, meetings, and deadlines    |
+
 
 ### Milestones
 1. **Analysis**: Scenario ideation, use case analysis and user story writing.
