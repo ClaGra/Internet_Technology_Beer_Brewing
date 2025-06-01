@@ -29,8 +29,9 @@ public class Customer {
 
     private String street;
 
-    @Pattern(regexp = "\\d{4}", message = "ZIP code must be 4 digits")
-    private String zipCode;
+    @Min(value = 1000, message = "ZIP code must be at least 1000")
+    @Max(value = 9999, message = "ZIP code must be at most 9999")
+    private Integer zipCode;
 
     private String city;
 
@@ -85,11 +86,11 @@ public class Customer {
     }
 
 
-    public String getZipCode() {
+    public Integer getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(Integer zipCode) {
         this.zipCode = zipCode;
     }
 

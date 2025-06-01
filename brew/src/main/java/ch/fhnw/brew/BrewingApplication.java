@@ -35,7 +35,7 @@ public class BrewingApplication {
         customer1.setLastName("Brewer");
         customer1.setDateOfBirth(LocalDate.of(1990, 5, 15));
         customer1.setStreet("Hopfenweg 12");
-        customer1.setZipCode("8000");
+        customer1.setZipCode(8000);
         customer1.setCity("Zurich");
         customer1.setEmail("anna@example.com");
         customer1.setPhone("0781234567");
@@ -47,7 +47,7 @@ public class BrewingApplication {
         customer2.setLastName("Hopkins");
         customer2.setDateOfBirth(LocalDate.of(1985, 8, 20));
         customer2.setStreet("Malzstrasse 3");
-        customer2.setZipCode("4051");
+        customer2.setZipCode(4051);
         customer2.setCity("Basel");
         customer2.setEmail("ben.h@example.com");
         customer2.setPhone("0797654321");
@@ -59,7 +59,7 @@ public class BrewingApplication {
         customer3.setLastName("Maltz");
         customer3.setDateOfBirth(LocalDate.of(1992, 3, 9));
         customer3.setStreet("Brauergasse 7");
-        customer3.setZipCode("3001");
+        customer3.setZipCode(3001);
         customer3.setCity("Bern");
         customer3.setEmail("lina.m@example.com");
         customer3.setPhone("0766543210");
