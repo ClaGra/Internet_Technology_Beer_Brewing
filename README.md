@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
+
 #### Contents:
 - [Analysis](#analysis)
   - [Scenario](#scenario)
@@ -162,10 +163,40 @@ The Excel sheet does not give any insights about specific customers or their ord
 ## Design
 > 🚧: Keep in mind the Corporate Identity (CI); you shall decide appropriately the color schema, graphics, typography, layout, User Experience (UX), and so on.
 
+## Corporate Identity (CI) & Visual Style
+### Color Scheme:
+The design uses a warm, inviting palette that reflects the local and traditional values of Brauverein Full:
+
+- Primary: Mustard Yellow #e1c547 – used in the header, buttons, and table headers
+- Accent: Amber and Brown tones – seen in the landing image and align with beer barrels and hops
+- Neutral: White for backgrounds to ensure content readability
+- Text: Black or dark gray for optimal contrast
+
+### Typography:
+A modern sans-serif font is used for both headers and body text to ensure clarity and consistency. Button and menu text are bold for emphasis and easy navigation.
+
+### Graphics:
+The image on the landing page supports the brand’s identity and creates a strong visual connection to the brewing theme.
+
+## Layout & UX (User Experience)
+- Simple and consistent layout across all views supports an intuitive user flow
+- Sidebar-style top navigation offers quick access to main sections (e.g., Brewing, Bottling, Customers, Inventory)
+- List/detail structure is applied:
+	- Detail/edit options via view, edit, delete icons
+- Highlights are used for:
+	- Important system alerts (like deletion confirmation)
+- Action buttons (e.g., “+ Add Brewing,” “Save,” “Discard”) are grouped for clear workflows and use icon support where possible
+
+## Responsive & Accessible Design
+- The interface is optimized for both desktop and mobile views using a clean layout and sufficient padding
+- Interactive elements are large enough for touch devices and designed with contrast for accessibility
+- Labels, forms, and dropdowns support efficient data input with reduced user error
+  
 ### Wireframe
 > 🚧: It is suggested to start with a wireframe. The wireframe focuses on the website structure (Sitemap planning), sketching the pages using Wireframe components (e.g., header, menu, footer) and UX. You can create a wireframe already with draw.io or similar tools. 
 
 Starting from the home page, we can visit different pages. Available public pages are visible in the menu...
+![image](https://github.com/user-attachments/assets/d057e8ab-198f-4242-b0de-482bef5243b2)
 
 ## Landing Page:
 ![image](https://github.com/user-attachments/assets/319f9ffd-2c1d-4a3f-8350-2527f28bcb35)
