@@ -44,9 +44,4 @@ public class Recipe {
     public void setRecipeCategory(RecipeCategory recipeCategory) {
         this.recipeCategory = recipeCategory;
     }
-
-    @Transient
-    public String getRecipeCategoryLabel() {
-        return recipeCategory != null ? recipeCategory.getLabel() : null;
-    }
 }
