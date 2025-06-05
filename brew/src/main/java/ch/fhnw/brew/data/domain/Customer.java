@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import ch.fhnw.brew.validation.MinAge;
 
 @Entity
 @Table(name = "customer")
@@ -23,14 +23,14 @@ public class Customer {
     @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @Past(message = "Date of birth must be in the past")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @MinAge(16)
+    @NotNull(message = "Date of birth is required")
     private LocalDate dateOfBirth;
 
     private String street;
 
-    @Min(value = 1000, message = "ZIP code must be at least 1000")
-    @Max(value = 9999, message = "ZIP code must be at most 9999")
+    @Min(value = 1000, message = "Please enter a vilid zip code")
+    @Max(value = 9999, message = "Please enter a vilid zip code")
     private Integer zipCode;
 
     private String city;

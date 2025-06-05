@@ -1,6 +1,8 @@
 package ch.fhnw.brew.data.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "recipe")
@@ -10,9 +12,13 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer recipeID;
 
+    @Column(nullable = false)
+    @NotBlank(message = "Recipe name is required")
     private String recipeName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull(message = "Recipe category is required")
     private RecipeCategory recipeCategory;
 
     public Integer getRecipeID() {
