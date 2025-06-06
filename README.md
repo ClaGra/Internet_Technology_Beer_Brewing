@@ -98,17 +98,8 @@ The Excel sheet does not give any insights about specific customers or their ord
 
 ### Use Case
 
-#### Use Case 100 General
-![image](https://github.com/user-attachments/assets/5542c2ec-1077-4f33-bd9d-9889e3f03dc7)
-
-- UC-101 [Login]: The system shall allow both the admin and the user to log in.
-- UC-102 [Create Views]: The system shall allow both the admin and the user to create new views.
-- UC-103 [Edit Views]: The system shall allow both the admin and the user to edit existing views.
-- UC-104 [Read Views]: The system shall allow both the admin and the user to read views.
-- UC-105 [Delete Views Logout]: The system shall allow the admin to delete views.
-
 #### Use Case 200 Inventory
-![image](https://github.com/user-attachments/assets/f446ea14-2932-42c3-847d-d0babf862e8f)
+![image](https://github.com/user-attachments/assets/89722595-f126-4139-8bf1-839ec855425b)
 
 - UC-201 [Add Inventory]: The system shall allow both the admin and the user to manually add new inventory items. Additionally, the system shall automatically update the inventory based on newly created brewing protocols and bottling records.
 - UC-202 [Edit Inventory]: The system shall allow both the admin and the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
@@ -118,7 +109,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-206 [View Inventory Summary]: The system shall allow both the admin and the user to view the inventory summary.
 
 #### Use Case 300 Brewing
-![image](https://github.com/user-attachments/assets/5b561b21-6fec-4301-9982-63d486409344)
+![image](https://github.com/user-attachments/assets/af4457cd-3fc1-42f7-ad8a-eb46ff53ba93)
 
 - UC-301 [Add Brewing Protocol]: The system shall allow the admin to add a new brewing protocol.
 - UC-302 [Edit Brewing Protocol]: The system shall allow both the admin and the user to edit an existing brewing protocol.
@@ -136,7 +127,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-405 [View Bottling by ID]: The system shall allow both the admin and the user to view bottling information sorted by ID.
 
 #### Use Case 500 Customer
-![image](https://github.com/user-attachments/assets/c736977a-3d99-4e50-a6d5-318e4ea2df3b)
+![image](https://github.com/user-attachments/assets/94b0e298-729a-4871-99f5-d9b907008f15)
 
 - UC-501 [Add Customer]: The system shall allow the admin to add a new customer.
 - UC-502 [Edit Customer]: The system shall allow both the admin and the user to edit an existing customer.
