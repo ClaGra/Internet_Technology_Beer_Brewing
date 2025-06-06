@@ -136,7 +136,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-505 [View Customer by ID]: The system shall allow both the admin and the user to view customer information sorted by ID.
 
 #### Use Case 600 Recipe
-![image](https://github.com/user-attachments/assets/1724c986-77b7-463c-a2b9-d49680d6a602)
+![image](https://github.com/user-attachments/assets/16f720fc-000a-4155-b753-057da7da24d2)
 
 - UC-601 [Add Recipe]: The system shall allow the admin to add a new recipe.
 - UC-602 [Edit Recipe]: The system shall allow both the admin and the user to edit an existing recipe.
