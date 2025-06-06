@@ -99,7 +99,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 ### Use Case
 
 #### Use Case 200 Inventory
-![image](https://github.com/user-attachments/assets/89722595-f126-4139-8bf1-839ec855425b)
+![image](https://github.com/user-attachments/assets/eb778552-a277-410b-879c-d236776bb929)
 
 - UC-201 [Add Inventory]: The system shall allow both the admin and the user to manually add new inventory items. Additionally, the system shall automatically update the inventory based on newly created brewing protocols and bottling records.
 - UC-202 [Edit Inventory]: The system shall allow both the admin and the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
@@ -109,7 +109,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-206 [View Inventory Summary]: The system shall allow both the admin and the user to view the inventory summary.
 
 #### Use Case 300 Brewing
-![image](https://github.com/user-attachments/assets/af4457cd-3fc1-42f7-ad8a-eb46ff53ba93)
+![image](https://github.com/user-attachments/assets/6127b51d-4d0c-43bd-b8c3-e0c0c40267f2)
 
 - UC-301 [Add Brewing Protocol]: The system shall allow the admin to add a new brewing protocol.
 - UC-302 [Edit Brewing Protocol]: The system shall allow both the admin and the user to edit an existing brewing protocol.
@@ -197,9 +197,9 @@ Starting from the home page, we can visit different pages. Available public page
 ![image](https://github.com/user-attachments/assets/137b861a-4ea2-4e75-86c6-c52181f76d94)
 
 ## Brewing Protocol:
-![image](https://github.com/user-attachments/assets/b61edacb-2d51-4ece-a70a-5c7004eba6c9)
-![image](https://github.com/user-attachments/assets/b50af2fe-b741-449f-b4e9-509324c873e2)
-![image](https://github.com/user-attachments/assets/43823a7e-8e50-4515-ac1f-f6911f54eceb)
+![image](https://github.com/user-attachments/assets/6df9ca2d-c625-4659-a9c6-e40bae0b60c6)
+![image](https://github.com/user-attachments/assets/4fbba231-799c-4245-b29f-83231cee8805)
+![image](https://github.com/user-attachments/assets/41fec6e1-b1c7-4bb0-831f-0268360ea265)
 
 ## Customer overview
 ![image](https://github.com/user-attachments/assets/86aeff53-199b-4ce0-b069-0a6a6e3bf01d)
