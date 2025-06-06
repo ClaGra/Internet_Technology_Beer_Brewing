@@ -97,6 +97,10 @@ The Excel sheet does not give any insights about specific customers or their ord
 
 ### Use Case
 
+#### Use Case 100 Order
+![image](https://github.com/user-attachments/assets/0b3f9cc6-137f-477d-bee6-c99b1c805c0a)
+
+
 #### Use Case 200 Inventory
 ![image](https://github.com/user-attachments/assets/eb778552-a277-410b-879c-d236776bb929)
 
