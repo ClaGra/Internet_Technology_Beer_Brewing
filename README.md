@@ -127,7 +127,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-405 [View Bottling by ID]: The system shall allow both the admin and the user to view bottling information sorted by ID.
 
 #### Use Case 500 Customer
-![image](https://github.com/user-attachments/assets/94b0e298-729a-4871-99f5-d9b907008f15)
+![image](https://github.com/user-attachments/assets/312bc4a2-ab9c-4b0d-aa15-5727c86b01c4)
 
 - UC-501 [Add Customer]: The system shall allow the admin to add a new customer.
 - UC-502 [Edit Customer]: The system shall allow both the admin and the user to edit an existing customer.
