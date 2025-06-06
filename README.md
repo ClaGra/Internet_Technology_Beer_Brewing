@@ -145,7 +145,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-605 [View Recipe by ID]: The system shall allow both the admin and the user to view recipe information sorted by ID.
 
 #### Use Case 700 Alert
-![image](https://github.com/user-attachments/assets/edcaa97b-2053-485c-8822-aa7aaea6fc92)
+![image](https://github.com/user-attachments/assets/78aadc7c-fef0-491e-b5db-81486226747e)
 
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72.
 - UC-702 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category is above 72. 
@@ -187,7 +187,7 @@ The image on the landing page supports the brand’s identity and creates a stro
 > 🚧: It is suggested to start with a wireframe. The wireframe focuses on the website structure (Sitemap planning), sketching the pages using Wireframe components (e.g., header, menu, footer) and UX. You can create a wireframe already with draw.io or similar tools. 
 
 Starting from the home page, we can visit different pages. Available public pages are visible in the menu...
-![image](https://github.com/user-attachments/assets/d057e8ab-198f-4242-b0de-482bef5243b2)
+![image](https://github.com/user-attachments/assets/7e8f8753-8b2b-464e-8fd3-957a2be2583b)
 
 ## Landing Page:
 ![image](https://github.com/user-attachments/assets/319f9ffd-2c1d-4a3f-8350-2527f28bcb35)
