@@ -145,10 +145,11 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-605 [View Recipe by ID]: The system shall allow both the admin and the user to view recipe information sorted by ID.
 
 #### Use Case 700 Alert
-![image](https://github.com/user-attachments/assets/78aadc7c-fef0-491e-b5db-81486226747e)
+![image](https://github.com/user-attachments/assets/6d28f7bd-0974-4986-bdbc-5e2d95bcadd4)
 
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72.
-- UC-702 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category is above 72. 
+- UC-702 [View Alert]: The system shall allow Admin and Users to view all current alerts with related inventory details.
+- UC-703 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category is above 72. 
 
 
 ## Design
