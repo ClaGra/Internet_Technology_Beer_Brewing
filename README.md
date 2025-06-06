@@ -68,7 +68,6 @@ The Excel sheet does not give any insights about specific customers or their ord
 4. As a User, I want to view brewing protocols so that I can understand the production process.
 5. As a User, I want to view brewing protocols by ID so that I can reference specific batches.
 
-
 #### User Stories Bottoling 
 1. As a User, I want to add bottling records so that packaging is documented.
 2. As a User, I want to edit bottling records so that I can update packaging information.
@@ -145,7 +144,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-605 [View Recipe by ID]: The system shall allow both the admin and the user to view recipe information sorted by ID.
 
 #### Use Case 700 Alert
-![image](https://github.com/user-attachments/assets/6d28f7bd-0974-4986-bdbc-5e2d95bcadd4)
+![image](https://github.com/user-attachments/assets/f78d80d6-1bd1-4f11-b450-ea7d64f539b4)
 
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72.
 - UC-702 [View Alert]: The system shall allow Admin and Users to view all current alerts with related inventory details.
