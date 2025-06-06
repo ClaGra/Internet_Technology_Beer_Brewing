@@ -187,7 +187,7 @@ The image on the landing page supports the brand’s identity and creates a stro
 > 🚧: It is suggested to start with a wireframe. The wireframe focuses on the website structure (Sitemap planning), sketching the pages using Wireframe components (e.g., header, menu, footer) and UX. You can create a wireframe already with draw.io or similar tools. 
 
 Starting from the home page, we can visit different pages. Available public pages are visible in the menu...
-![image](https://github.com/user-attachments/assets/7e8f8753-8b2b-464e-8fd3-957a2be2583b)
+![image](https://github.com/user-attachments/assets/8505a221-bccc-4885-8518-3e9d44328843)
 
 ## Landing Page:
 ![image](https://github.com/user-attachments/assets/319f9ffd-2c1d-4a3f-8350-2527f28bcb35)
