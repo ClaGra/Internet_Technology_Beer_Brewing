@@ -99,7 +99,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 ### Use Case
 
 #### Use Case 100 General
-![image](https://github.com/user-attachments/assets/02af40b1-dbaa-4138-a27a-914c35b16af3)
+![image](https://github.com/user-attachments/assets/5542c2ec-1077-4f33-bd9d-9889e3f03dc7)
 
 - UC-101 [Login]: The system shall allow both the admin and the user to log in.
 - UC-102 [Create Views]: The system shall allow both the admin and the user to create new views.
@@ -108,7 +108,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-105 [Delete Views Logout]: The system shall allow the admin to delete views.
 
 #### Use Case 200 Inventory
-![image](https://github.com/user-attachments/assets/a71acacd-768a-4acd-bd23-ee32c32ede8e)
+![image](https://github.com/user-attachments/assets/f446ea14-2932-42c3-847d-d0babf862e8f)
 
 - UC-201 [Add Inventory]: The system shall allow both the admin and the user to manually add new inventory items. Additionally, the system shall automatically update the inventory based on newly created brewing protocols and bottling records.
 - UC-202 [Edit Inventory]: The system shall allow both the admin and the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
@@ -118,7 +118,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-206 [View Inventory Summary]: The system shall allow both the admin and the user to view the inventory summary.
 
 #### Use Case 300 Brewing
-![image](https://github.com/user-attachments/assets/bb617d79-2072-4987-a8fa-5fc7c40e35be)
+![image](https://github.com/user-attachments/assets/5b561b21-6fec-4301-9982-63d486409344)
 
 - UC-301 [Add Brewing Protocol]: The system shall allow the admin to add a new brewing protocol.
 - UC-302 [Edit Brewing Protocol]: The system shall allow both the admin and the user to edit an existing brewing protocol.
@@ -126,8 +126,8 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-304 [View Brewing Protocol]: The system shall allow both the admin and the user to view brewing protocols.
 - UC-305 [View Brewing Protocol by ID]: The system shall allow both the admin and the user to view brewing protocols sorted by ID.
 
-#### Use Case 400 Bottoling
-![image](https://github.com/user-attachments/assets/eb40a4e3-d665-4c8d-86f9-0fead5d03b04)
+#### Use Case 400 Bottling
+![image](https://github.com/user-attachments/assets/e608d4c1-9432-497b-b7c6-2088336316c8)
 
 - UC-401 [Add Bottling]: The system shall allow both the admin and the user to add a new bottling record.
 - UC-402 [Edit Bottling]: The system shall allow both the admin and the user to edit an existing bottling record.
@@ -135,8 +135,8 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-404 [View Bottling]: The system shall allow both the admin and the user to view bottling information.
 - UC-405 [View Bottling by ID]: The system shall allow both the admin and the user to view bottling information sorted by ID.
 
-#### Use Case 500 Customerg
-![image](https://github.com/user-attachments/assets/b3757710-eba2-4cf8-858b-9916f562a3f4)
+#### Use Case 500 Customer
+![image](https://github.com/user-attachments/assets/c736977a-3d99-4e50-a6d5-318e4ea2df3b)
 
 - UC-501 [Add Customer]: The system shall allow the admin to add a new customer.
 - UC-502 [Edit Customer]: The system shall allow both the admin and the user to edit an existing customer.
@@ -145,7 +145,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-505 [View Customer by ID]: The system shall allow both the admin and the user to view customer information sorted by ID.
 
 #### Use Case 600 Recipe
-![image](https://github.com/user-attachments/assets/534a3e3f-0072-4254-aac4-b410271269b7)
+![image](https://github.com/user-attachments/assets/80165ca5-e670-4322-b546-9f095a979cc3)
 
 - UC-601 [Add Recipe]: The system shall allow the admin to add a new recipe.
 - UC-602 [Edit Recipe]: The system shall allow both the admin and the user to edit an existing recipe.
@@ -154,7 +154,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-605 [View Recipe by ID]: The system shall allow both the admin and the user to view recipe information sorted by ID.
 
 #### Use Case 700 Alert
-![image](https://github.com/user-attachments/assets/7f038159-f956-49dc-9781-147108920a54)
+![image](https://github.com/user-attachments/assets/19b7212b-04b6-4265-b26a-84e0b1024f86)
 
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72.
 - UC-702 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category is above 72. 
