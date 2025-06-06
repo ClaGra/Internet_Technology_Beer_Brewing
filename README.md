@@ -94,12 +94,22 @@ The Excel sheet does not give any insights about specific customers or their ord
 2. As an Admin, I want to delete alerts so that I can manage and clear notifications.
 3. As a System, I want to automatically delete alerts when inventory is replenished so that only relevant alerts remain.
 
+#### User Stories Order
+1. As a User, I want to view all orders so that I can track submitted and processed orders.
+2. As a User, I want to add a new order so that I can record a customer’s purchase in the system.
+3. As a User, I want to edit existing orders so that I can update order details if necessary.
+4. As an Admin, I want to delete orders so that I can remove cancelled or invalid transactions.
+
 
 ### Use Case
 
 #### Use Case 100 Order
 ![image](https://github.com/user-attachments/assets/0b3f9cc6-137f-477d-bee6-c99b1c805c0a)
 
+- UC-101 [Add Order]: The system shall allow both the user and the admin to add new orders through a form. The order data will be stored and reflected in the order list view.
+- UC-102 [Edit Order]: The system shall allow both the user and the admin to update existing orders. The user selects an order, modifies fields such as date, product quantity, or customer name, and confirms the changes.
+- UC-103 [Delete Order]: The system shall allow the admin to delete an order. This action permanently removes the record from the database after confirmation.
+- UC-104 [View Orders]: The system shall allow both the user and the admin to view a list of all orders. Each record includes an order ID, date, and action buttons.
 
 #### Use Case 200 Inventory
 ![image](https://github.com/user-attachments/assets/eb778552-a277-410b-879c-d236776bb929)
@@ -162,7 +172,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 ### Color Scheme:
 The design uses a warm, inviting palette that reflects the local and traditional values of Brauverein Full:
 
-- Primary: Mustard Yellow #e1c547 – used in the header, buttons, and table headers
+- Primary: Mustard Yellow #E1C547 – used in the header, buttons, and table headers
 - Accent: Amber and Brown tones – seen in the landing image and align with beer barrels and hops
 - Neutral: White for backgrounds to ensure content readability
 - Text: Black or dark gray for optimal contrast
