@@ -118,7 +118,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-305 [View Brewing Protocol by ID]: The system shall allow both the admin and the user to view brewing protocols sorted by ID.
 
 #### Use Case 400 Bottling
-![image](https://github.com/user-attachments/assets/c50279ba-f0cf-4e65-b482-9353898cdb23)
+![image](https://github.com/user-attachments/assets/dd006756-581d-4e2f-b71b-38198c8137a7)
 
 - UC-401 [Add Bottling]: The system shall allow both the admin and the user to add a new bottling record.
 - UC-402 [Edit Bottling]: The system shall allow both the admin and the user to edit an existing bottling record.
