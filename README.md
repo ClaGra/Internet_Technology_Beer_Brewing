@@ -217,8 +217,8 @@ Starting from the home page, we can visit different pages. Available public page
 ### Domain Design
 > 🚧: Provide a picture and describe your domain model; you may use Entity-Relationship Model or UML class diagram. Both can be created in Visual Paradigm - we have an academic license for it.
 
-![image](https://github.com/user-attachments/assets/b8cebc80-d842-4b4f-9394-fb6e54898480)
-hmm
+![WhatsApp Image 2025-06-06 at 10 51 21_dfde884a](https://github.com/user-attachments/assets/ba1fe227-0f07-44e9-a8d2-d0e6e9cbd4d1)
+
 ### Business Logic 
 > 🚧: Describe the business logic for **at least one business service** in detail. If available, show the expected path and HTPP method. The remaining documentation of APIs shall be made available in the swagger endpoint. The default Swagger UI page is available at /swagger-ui.html.
 
