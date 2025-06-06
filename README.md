@@ -215,9 +215,10 @@ Starting from the home page, we can visit different pages. Available public page
 > 🚧: A prototype can be designed using placeholder text/figures in Budibase. You don't need to connect the front-end to back-end in the early stages of the project development.
 
 ### Domain Design
-> 🚧: Provide a picture and describe your domain model; you may use Entity-Relationship Model or UML class diagram. Both can be created in Visual Paradigm - we have an academic license for it.
+This domain model illustrates the core structure of the brewing application using a UML class diagram. It defines key entities such as User, Customer, Order, BrewingProtocol, Bottling, Inventory, Recipe, and Alert, and visualizes their relationships, attributes, and operations to support brewing process management.
 
-![WhatsApp Image 2025-06-06 at 10 51 21_dfde884a](https://github.com/user-attachments/assets/ba1fe227-0f07-44e9-a8d2-d0e6e9cbd4d1)
+![UML_Brewing_HQ](https://github.com/user-attachments/assets/bf4e91ed-d1c8-4ee7-935c-acc87882b82d)
+
 
 ### Business Logic 
 > 🚧: Describe the business logic for **at least one business service** in detail. If available, show the expected path and HTPP method. The remaining documentation of APIs shall be made available in the swagger endpoint. The default Swagger UI page is available at /swagger-ui.html.
