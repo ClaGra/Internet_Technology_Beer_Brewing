@@ -281,23 +281,21 @@ Relevant API Endpoints
 
 
 ## Implementation
-> 🚧: Briefly describe your technology stack, which apps were used and for what.
+This web application is built with Spring Boot and uses an H2 in-memory database for data persistence during runtime. The backend is designed as a RESTful API and integrated into a Budibase frontend.
 
-### Backend Technology
-> 🚧: It is suggested to clone this repository, but you are free to start from fresh with a Spring Initializr. If so, describe if there are any changes to the PizzaRP e.g., different dependencies, versions & etc... Please, also describe how your database is set up. If you want a persistent or in-memory H2 database check [link](https://github.com/FHNW-INT/Pizzeria_Reference_Project/blob/main/pizza/src/main/resources/application.properties). If you have placeholder data to initialize at the app, you may use a variation of the method **initPlaceholderData()** available at [link](https://github.com/FHNW-INT/Pizzeria_Reference_Project/blob/main/pizza/src/main/java/ch/fhnw/pizza/PizzaApplication.java).
+### Backend Technology Stack
+The backend uses the following technologies and libraries:
 
-This Web application is relying on [Spring Boot](https://projects.spring.io/spring-boot) and the following dependencies:
+- Spring Boot – Application framework
+- Spring Data JPA – ORM and data access
+- H2 Database – In-memory database for fast and lightweight testing
+- Spring Security – Basic authentication and role-based access control
+- Springdoc OpenAPI (Swagger UI) – API documentation
 
-- [Spring Boot](https://projects.spring.io/spring-boot)
-- [Spring Data](https://projects.spring.io/spring-data)
-- [Java Persistence API (JPA)](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html)
-- [H2 Database Engine](https://www.h2database.com)
+The project was initialized using Spring Initializr, targeting Java 17 and Spring Boot 3.2.2.
 
-To bootstrap the application, the [Spring Initializr](https://start.spring.io/) has been used.
-
-Then, the following further dependencies have been added to the project `pom.xml`:
-
-- DB:
+### Key Dependencies
+- Database:
 ```XML
 <dependency>
 			<groupId>com.h2database</groupId>
@@ -315,10 +313,35 @@ Then, the following further dependencies have been added to the project `pom.xml
    </dependency>
 ```
 
-### Frontend Technology
-> 🚧: Describe your views and what APIs is used on which view. If you don't have access to the Internet
-Technology class Budibase environment(https://inttech.budibase.app/), please write to Devid on MS teams.
+- Security:
+```XML
+   <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+   </dependency>
+```
 
+Other essential dependencies include:
+- spring-boot-starter-web
+- spring-boot-starter-data-jpa
+- spring-boot-starter-actuator
+- jakarta.validation-api and hibernate-validator
+- spring-boot-starter-test (for testing)
+
+### Database Setup
+The application uses an H2 in-memory database, meaning that all data is reset on every application restart. No external database configuration is required.
+
+To populate the system with sample data for development and testing, an initPlaceholderData() method is executed at startup (@PostConstruct). This method creates:
+- 3 customers
+- 6 beer recipes
+- 6 brewing protocols
+- 6 bottlings
+- 3 customer orders
+
+All of this is managed entirely in memory and requires no manual setup.
+
+
+### Frontend Technology
 This web application was developed using Budibase, a low-code platform for internal tools. The frontend is composed of several views, each tied to backend APIs implemented in Java with Spring Boot. These views allow users to manage key features such as brewing protocols, inventory, and customer orders.
 
 The application is available for preview at:
@@ -345,34 +368,28 @@ While Budibase provides a fast and flexible way to build internal tools, some li
 - XXX
 
 ## Execution
-> 🚧: Please describe how to execute your app and what configurations must be changed to run it. 
+To run the Beer Brewing platform, both the backend service (Spring Boot) and the Budibase frontend must be started and connected correctly.
 
-**The codespace URL of this Repo is subject to change.** Therefore, the Budibase PizzaRP webapp is not going to show any data in the view, when the URL is not updated or the codespace is offline. Follow these steps to start the webservice and reconnect the webapp to the new webservice url. 
+1. Start the Render Application
+Open the backend hosted on Render via the following URL:
+https://internet-technology-beer-brewing.onrender.com
+This may take up to 5 minutes to wake up from sleep mode.
 
-> 🚧: This is a shortened description for example purposes. A complete tutorial will be provided in a dedicated lecture.
+2. Open the Budibase Application
+In the Budibase environment for the class, open the app named:
+Brugg 1_BeerBrewing
+https://inttech.budibase.app
 
-1. Clone PizzaRP in a new repository.
-2. Start your codespace (see video guide at: [link](https://www.youtube.com/watch?v=_W9B7qc9lVc&ab_channel=GitHub))
-3. Run the PizzaRP main available at PizzaApplication.java on your own codespace.
-4. Set your app with a public port, see the guide at [link](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
-5. Create an own Budibase app, you can export/import the existing Pizzeria app. Guide available at [link](https://docs.budibase.com/docs/export-and-import-apps).
-6. Update the pizzeria URL in the datasource and publish your app.
+### Notes
+Backend URL Configuration:
+The Budibase app fetches data from the backend. If the backend URL changes or becomes unavailable (e.g., due to Render codespace resets), you will need to update the data source URL in Budibase.
+
+No Data Shown?
+If the Budibase app loads but no data is visible in the views, ensure that the Render backend is fully running. If the issue persists, verify that the correct URL is configured in Budibase.
+
 
 ### Deployment to a PaaS
-> 🚧: Deployment to PaaS is optional but recommended as it will make your application (backend) accessible without server restart and through a unique, constantly available link.  
-
-Alternatively, you can deploy your application to a free PaaS like [Render](https://dashboard.render.com/register).
-1. Refer to the Dockerfile inside the application root (FHNW-INT/Pizzeria_Reference_Project/pizza).
-2. Adapt line 13 to the name of your jar file. The jar name should be derived from the details in the pom.xml as follows:<br>
-`{artifactId}-{version}.jar` 
-2. Login to Render using your GitHub credentials.
-3. Create a new Web Service and choose Build and deploy from a Git repository.
-4. Enter the link to your (public) GitHub repository and click Continue.
-5. Enter the Root Directory (name of the folder where pom.xml resides).
-6. Choose the Instance Type as Free/Hobby. All other details are default.
-7. Click on Create Web Service. Your app will undergo automatic build and deployment. Monitor the logs to view the progress or error messages. The entire process of Build+Deploy might take several minutes.
-8. After successful deployment, you can access your backend using the generated unique URL (visible on top left under the name of your web service).
-9. This unique URL will remain unchanged as long as your web service is deployed on Render. You can now integrate it in Budibase to make API calls to your custom endpoints.
+To make the application accessible online without needing to restart a local server, we deployed the backend to a Platform-as-a-Service (PaaS) provider — Render. This allows users and testers to access the backend anytime via a consistent URL.
 
 ## Project Management
 > 🚧: Include all the participants and briefly describe each of their **individual** contribution and/or roles. Screenshots/descriptions of your Kanban board or similar project management tools are welcome.
@@ -416,7 +433,7 @@ The entire team contributed to testing by checking functionalities across the fr
 4. **Business Logic and API Design**: Definition of business logic and API.
 5. **Data and API Implementation**: Implementation of data access and business logic layers, and API.
 6. **Security and Frontend Implementation**: Integration of security framework and frontend realisation.
-7. (optional) **Deployment**: Deployment of Web application on cloud infrastructure.
+7. **Deployment**: Deployment of Web application on cloud infrastructure.
 
 
 #### Maintainer
