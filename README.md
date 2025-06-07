@@ -231,7 +231,7 @@ Starting from the home page, we can visit different pages. Available public page
 ### Domain Design
 This domain model illustrates the core structure of the brewing application using a UML class diagram. It defines key entities such as User, Customer, Order, BrewingProtocol, Bottling, Inventory, Recipe, and Alert, and visualizes their relationships, attributes, and operations to support brewing process management.
 
-![UML_Brewing_HQ](https://github.com/user-attachments/assets/bf4e91ed-d1c8-4ee7-935c-acc87882b82d)
+![image](https://github.com/user-attachments/assets/488ea3de-2c68-4bca-8ffd-1cb54d8baf4b)
 
 
 ### Business Logic 
@@ -250,23 +250,34 @@ Based on the UC-4, there will be two offers and a standard offer. Given a locati
 **Method:** `GET`
 
 ### Business Logic 
-A key part of our application is the automatic adjustment of inventory and alert management, which ensures that stock levels are always monitored and visible in real-time — without manual tracking. The system reacts to business events such as orders and bottling, updating inventory levels accordingly and triggering or clearing alerts based on stock thresholds.
+Our application follows four key business logic rules to ensure efficiency, legal compliance, and data integrity. First, automated inventory management updates stock levels in real-time based on events like bottling and orders, removing the need for manual tracking. Second, an alert system monitors inventory and triggers warnings when levels fall below a set threshold. Third, age verification checks are performed during order entry to ensure customers are at least 16 years old. Finally, deletion restrictions prevent critical data—like recipes or bottling records linked to brewing or orders—from being removed.
 
 **Logic Description**
-1. Orders reduce inventory: When a customer places an order, the system reduces the inventory quantity of each ordered item.
 
-2. Bottling increases inventory: When a batch is bottled, the finished product is added to the inventory, increasing its quantity.
+1. Automated Inventory Management
+	- When an employee places a customer order, the system deducts the ordered quantity from the inventory.
+	- When a batch is bottled, the finished product is added to the inventory.
 
-3. Alerts are automatically triggered or resolved: After each inventory update, the system checks whether the current quantity is below the critical threshold of 72 units (per category):
-- If the quantity falls below 72, an alert is automatically triggered.
-- If the quantity rises back to 72 or above, the corresponding alert is automatically resolved (deleted or marked inactive).
+2. Alert System
+	- If stock drops below 72 units, an alert is triggered.
+	- If stock reaches 72 units or more, the alert is resolved (deleted or marked inactive).
+
+3. Age Verification
+	- During order entry, the system checks that the customer is at least 16 years old based on their birthdate.
+
+4. Security / Deletion Rules
+	- A recipe cannot be deleted if it has been used in a brewing protocol.
+	- A bottling record cannot be deleted if it is linked to a customer order.
+
 
 Relevant API Endpoints
-| Action          | HTTP Method | Endpoint        | Triggered Logic                          |
-| --------------- | ----------- | --------------- | ---------------------------------------- |
-| Place Order     | POST        | `/api/orders`   | Decrease inventory, trigger alert if <72 |
-| Finish Bottling | POST        | `/api/bottling` | Increase inventory, clear alert if ≥72   |
-| View Alerts     | GET         | `/api/alerts`   | Display all active low-stock alerts      |
+| Action          | HTTP Method | Endpoint            | Triggered Logic                                                 |
+| --------------- | ----------- | ------------------- | --------------------------------------------------------------- |
+| Place Order     | POST        | `/api/orders`       | Reduce inventory, trigger alert if <72, show age warning if <16 |
+| Finish Bottling | POST        | `/api/bottling`     | Increase inventory, resolve alert if stock ≥72                  |
+| View Alerts     | GET         | `/api/alerts`       | Display all active low-stock alerts                             |
+| Delete Recipe   | DELETE      | `/api/recipes/:id`  | Block if recipe is used in a brewing protocol                   |
+| Delete Bottling | DELETE      | `/api/bottling/:id` | Block if bottling is referenced by an order                     |
 
 
 ## Implementation
@@ -305,27 +316,33 @@ Then, the following further dependencies have been added to the project `pom.xml
 ```
 
 ### Frontend Technology
-> 🚧: Describe your views and what APIs is used on which view. If you don't have access to the Internet Technology class Budibase environment(https://inttech.budibase.app/), please write to Devid on MS teams.
+> 🚧: Describe your views and what APIs is used on which view. If you don't have access to the Internet
+Technology class Budibase environment(https://inttech.budibase.app/), please write to Devid on MS teams.
 
-This Web application was developed using Budibase and it is available for preview at https://inttech.budibase.app/app/pizzeria. 
-
-This web application was developed using Budibase, a low-code platform for building internal tools. The frontend consists of multiple views, each connected to specific backend RESTful APIs implemented in Java using Spring Boot. These views allow users to interact with core features like brewing protocols, inventory management, and customer orders.
+This web application was developed using Budibase, a low-code platform for internal tools. The frontend is composed of several views, each tied to backend APIs implemented in Java with Spring Boot. These views allow users to manage key features such as brewing protocols, inventory, and customer orders.
 
 The application is available for preview at:
-https://xxxx
+https://internet-technology-beer-brewing.onrender.com
+| View                 | Purpose                                     | HTTP Methods Used      | API Endpoint(s)          | Entity/Entities Involved   |
+| -------------------- | ------------------------------------------- | ---------------------- | ------------------------ | -------------------------- |
+| **Home**             | Display current system alerts               | GET                    | `/api/alerts`            | `Alert`                    |
+| **Login**            | Authenticate users using form-based login   | POST                   | `/login`                 | `User` (in-memory only)    |
+| **Brewing Protocol** | Create, edit, and delete brewing procedures | GET, POST, PUT, DELETE | `/api/brewing-protocols` | `BrewingProtocol`          |
+| **Recipes**          | Manage beer recipes and categories          | GET, POST, PUT, DELETE | `/api/recipes`           | `Recipe`, `RecipeCategory` |
+| **Inventory**        | Monitor current stock and make adjustments  | GET, PUT               | `/api/inventory`         | `Inventory`                |
+| **Bottling**         | Register new batches and edit bottling data | POST, PUT              | `/api/bottling`          | `Bottling`                 |
+| **Orders**           | Place and view customer orders              | GET, POST              | `/api/orders`            | `Order`, `OrderItem`       |
+| **Customers**        | Manage customer profiles and data           | GET, POST              | `/api/customers`         | `Customer`                 |
+| **Alerts**           | View currently active low-stock alerts      | GET                    | `/api/alerts`            | `Alert`                    |
 
-| View                 | Purpose                                    | HTTP Methods Used      | API Endpoint(s)              | Entity Used                |
-| -------------------- | ------------------------------------------ | ---------------------- | ---------------------------- | -------------------------- |
-| **Dashboard**        | Overview with recent alerts and orders     | GET                    | `/api/alerts`, `/api/orders` | `Alert`, `Order`           |
-| **Brewing Protocol** | Manage brewing procedures and steps        | GET, POST, PUT, DELETE | `/api/brewing-protocols`     | `BrewingProtocol`          |
-| **Recipes**          | Manage beer recipes                        | GET, POST, PUT, DELETE | `/api/recipes`               | `Recipe`, `RecipeCategory` |
-| **Inventory**        | Monitor and update stock levels            | GET, PUT               | `/api/inventory`             | `Inventory`                |
-| **Bottling**         | Document bottling steps and manage batches | POST, PUT              | `/api/bottling`              | `Bottling`                 |
-| **Orders**           | Create and view customer orders            | GET, POST              | `/api/orders`                | `Order`, `OrderItem`       |
-| **Customers**        | View and manage customer information       | GET, POST              | `/api/customers`             | `Customer`                 |
-| **Users**            | Manage user accounts and roles             | GET, POST, PUT         | `/api/users`                 | `User`, `Role`             |
-| **Alerts**           | View active system alerts                  | GET                    | `/api/alerts`                | `Alert`                    |
-
+### Constraints in Budibase
+While Budibase provides a fast and flexible way to build internal tools, some limitations were encountered during development:
+- Data validation is limited in the UI: complex rules (e.g. age checks) must be handled on the backend.
+- Dynamic form behavior (e.g. conditional logic or calculated fields) is not natively supported and requires workarounds.
+- UI customization options are somewhat limited compared to fully custom-coded solutions.
+- API integration is smooth for basic CRUD operations, but more complex workflows need careful structuring on the backend side.
+- XXX
+- XXX
 
 ## Execution
 > 🚧: Please describe how to execute your app and what configurations must be changed to run it. 
