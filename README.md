@@ -112,14 +112,13 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-104 [View Orders]: The system shall allow both the user and the admin to view a list of all orders. Each record includes an order ID, date, and action buttons.
 
 #### Use Case 200 Inventory
-![image](https://github.com/user-attachments/assets/eb778552-a277-410b-879c-d236776bb929)
+![image](https://github.com/user-attachments/assets/d7fbe49f-c05f-4ee8-8ac3-f3807c7155e3)
 
-- UC-201 [Add Inventory]: The system shall allow both the admin and the user to manually add new inventory items. Additionally, the system shall automatically update the inventory based on newly created brewing protocols and bottling records.
-- UC-202 [Edit Inventory]: The system shall allow both the admin and the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
-- UC-203 [Delete Inventory]: The system shall allow the admin to delete inventory items.
-- UC-204 [View Inventory]: The system shall allow both the admin and the user to view the inventory.
-- UC-205 [View Inventory by ID]: The system shall allow both the admin and the user to view the inventory sorted by ID.
-- UC-206 [View Inventory Summary]: The system shall allow both the admin and the user to view the inventory summary.
+- UC-201 [Edit Inventory]: The system shall allow both the admin and the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
+- UC-202 [Delete Inventory]: The system shall allow the admin to delete inventory items.
+- UC-203 [View Inventory]: The system shall allow both the admin and the user to view the inventory.
+- UC-204 [View Inventory by ID]: The system shall allow both the admin and the user to view the inventory sorted by ID.
+- UC-205 [View Inventory Summary]: The system shall allow both the admin and the user to view the inventory summary.
 
 #### Use Case 300 Brewing
 ![image](https://github.com/user-attachments/assets/6127b51d-4d0c-43bd-b8c3-e0c0c40267f2)
