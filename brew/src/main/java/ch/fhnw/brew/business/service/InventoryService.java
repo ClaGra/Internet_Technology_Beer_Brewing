@@ -1,8 +1,8 @@
 package ch.fhnw.brew.business.service;
 
-import ch.fhnw.brew.data.domain.Bottling;
 import ch.fhnw.brew.data.domain.Inventory;
 import ch.fhnw.brew.data.repository.InventoryRepository;
+import ch.fhnw.brew.data.repository.OrderRepository;
 import ch.fhnw.brew.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,44 +18,80 @@ public class InventoryService {
     private InventoryRepository inventoryRepository;
 
     @Autowired
-    private AlertService alertService;
+    private OrderRepository orderRepository;
 
-    public Inventory addInventory(Inventory inventory) {
-        int totalBefore = getTotalInventoryByCategory().getOrDefault(inventory.getInventoryCategoryName(), 0);
-        Inventory saved = inventoryRepository.save(inventory);
-        int totalAfter = getTotalInventoryByCategory().getOrDefault(inventory.getInventoryCategoryName(), 0);
-        handleThresholdChange(inventory.getInventoryCategoryName(), totalBefore, totalAfter);
-        return saved;
-    }
+    @Autowired
+    private AlertService alertService;
 
     public Inventory editInventory(Integer id, Inventory updated) {
         Inventory existing = inventoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Inventory not found"));
 
+        // Prevent changing batchNr or category
+        if (!Objects.equals(existing.getBatchNr(), updated.getBatchNr())) {
+            throw new IllegalStateException("Cannot change batch number directly in inventory. Update bottling instead.");
+        }
+        if (!Objects.equals(existing.getInventoryCategoryName(), updated.getInventoryCategoryName())) {
+            throw new IllegalStateException("Cannot change inventory category directly. Update bottling instead.");
+        }
+
+        Integer batchNr = existing.getBatchNr();
         String category = existing.getInventoryCategoryName();
+        int oldAmount = existing.getInventoryAmount();
+        int newAmount = updated.getInventoryAmount();
+        int delta = newAmount - oldAmount;
+
+        int currentTotal = inventoryRepository.findByBatchNr(batchNr).stream()
+                .mapToInt(Inventory::getInventoryAmount).sum();
+        int projectedTotal = currentTotal + delta;
+
+        Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(batchNr);
+        if (orderedAmount == null) orderedAmount = 0;
+
+        if (projectedTotal < orderedAmount) {
+            throw new IllegalStateException(
+                "Cannot reduce inventory: would drop available stock below ordered amount (" + orderedAmount + ")"
+            );
+        }
+
         int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
 
-        existing.setInventoryAmount(updated.getInventoryAmount());
-        existing.setInventoryCategoryName(updated.getInventoryCategoryName());
-        existing.setBatchNr(updated.getBatchNr());
+        existing.setInventoryAmount(newAmount);
         existing.setExpirationDate(updated.getExpirationDate());
 
         Inventory saved = inventoryRepository.save(existing);
-        int totalAfter = getTotalInventoryByCategory().getOrDefault(updated.getInventoryCategoryName(), 0);
-        handleThresholdChange(updated.getInventoryCategoryName(), totalBefore, totalAfter);
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        handleThresholdChange(category, totalBefore, totalAfter);
         return saved;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
+     @PreAuthorize("hasRole('ADMIN')")
     public void deleteInventory(Integer id) {
         Inventory existing = inventoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Inventory not found"));
 
         String category = existing.getInventoryCategoryName();
+        Integer batchNr = existing.getBatchNr();
+
+        int totalInventoryForBatch = inventoryRepository.findByBatchNr(batchNr)
+                .stream()
+                .mapToInt(Inventory::getInventoryAmount)
+                .sum();
+
+        Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(batchNr);
+        if (orderedAmount == null) orderedAmount = 0;
+
+        int remainingAfterDeletion = totalInventoryForBatch - existing.getInventoryAmount();
+
+        if (remainingAfterDeletion < orderedAmount) {
+            throw new IllegalStateException(
+                    "Cannot delete inventory: would drop available stock below ordered amount (" + orderedAmount + ")"
+            );
+        }
+
         int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
-
         inventoryRepository.delete(existing);
-
         int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
         handleThresholdChange(category, totalBefore, totalAfter);
     }
@@ -67,55 +103,6 @@ public class InventoryService {
 
     public List<Inventory> getAllInventories() {
         return inventoryRepository.findAll();
-    }
-
-    public Inventory updateInventoryAmount(String category, int change) {
-        List<Inventory> inventories = inventoryRepository.findByInventoryCategoryName(category);
-        Inventory latest = inventories.stream()
-                .max(Comparator.comparing(Inventory::getInventoryID))
-                .orElse(null);
-
-        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
-
-        Inventory target = (latest != null) ? latest : new Inventory();
-        target.setInventoryCategoryName(category);
-        target.setInventoryAmount(Optional.ofNullable(target.getInventoryAmount()).orElse(0) + change);
-
-        if (target.getInventoryAmount() < 0) {
-            throw new RuntimeException("Inventory would go below zero for category: " + category);
-        }
-
-        Inventory saved = inventoryRepository.save(target);
-        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
-        handleThresholdChange(category, totalBefore, totalAfter);
-        return saved;
-    }
-
-    public Inventory addInventoryFromBottling(Bottling bottling) {
-        String category = bottling.getBrewingProtocol().getRecipe().getRecipeName();
-        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
-
-        Inventory inventory = new Inventory();
-        inventory.setInventoryCategoryName(category);
-        inventory.setInventoryAmount(bottling.getAmount());
-        inventory.setBatchNr(bottling.getBrewingProtocol().getBatchNr());
-        inventory.setExpirationDate(bottling.getExpirationDate());
-
-        Inventory saved = inventoryRepository.save(inventory);
-        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
-        handleThresholdChange(category, totalBefore, totalAfter);
-        return saved;
-    }
-
-    public void removeInventoryForBatch(Integer batchNr) {
-        List<Inventory> toRemove = inventoryRepository.findByBatchNr(batchNr);
-        for (Inventory i : toRemove) {
-            String category = i.getInventoryCategoryName();
-            int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
-            inventoryRepository.delete(i);
-            int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
-            handleThresholdChange(category, totalBefore, totalAfter);
-        }
     }
 
     public Map<String, Integer> getTotalInventoryByCategory() {

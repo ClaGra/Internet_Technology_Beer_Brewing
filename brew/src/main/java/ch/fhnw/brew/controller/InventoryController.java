@@ -16,11 +16,6 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
-    @PostMapping
-    public ResponseEntity<Inventory> addInventory(@RequestBody Inventory inventory) {
-        return ResponseEntity.ok(inventoryService.addInventory(inventory));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<Inventory> editInventory(@PathVariable Integer id, @RequestBody Inventory inventory) {
         return ResponseEntity.ok(inventoryService.editInventory(id, inventory));

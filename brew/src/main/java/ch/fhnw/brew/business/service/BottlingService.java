@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BottlingService {
@@ -26,13 +28,13 @@ public class BottlingService {
     private BrewingProtocolRepository brewingProtocolRepository;
 
     @Autowired
-    private InventoryService inventoryService;
-
-    @Autowired
     private InventoryRepository inventoryRepository;
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private AlertService alertService;
 
     @Transactional
     public Bottling addBottling(Bottling bottling) {
@@ -41,11 +43,33 @@ public class BottlingService {
         BrewingProtocol fullProtocol = brewingProtocolRepository.findById(batchNr)
                 .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
 
+        // Check if a bottling for this protocol already exists
+        boolean alreadyExists = bottlingRepository.findAll().stream()
+                .anyMatch(b -> b.getBrewingProtocol().getBatchNr().equals(batchNr));
+
+        if (alreadyExists) {
+            throw new IllegalStateException("A bottling already exists for batch number " + batchNr);
+        }
+
         bottling.setBrewingProtocol(fullProtocol);
         setExpirationDate(bottling);
 
         Bottling saved = bottlingRepository.save(bottling);
-        inventoryService.addInventoryFromBottling(saved);
+
+        String category = fullProtocol.getRecipe().getRecipeName();
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
+
+        Inventory inventory = new Inventory();
+        inventory.setInventoryCategoryName(category);
+        inventory.setInventoryAmount(saved.getAmount());
+        inventory.setBatchNr(batchNr);
+        inventory.setExpirationDate(saved.getExpirationDate());
+
+        inventoryRepository.save(inventory);
+
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        handleThresholdChange(category, totalBefore, totalAfter);
+
         return saved;
     }
 
@@ -54,48 +78,53 @@ public class BottlingService {
         Bottling existing = bottlingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Bottling not found"));
 
-        int oldAmount = existing.getAmount();
-        int newAmount = updatedBottling.getAmount();
-        int delta = newAmount - oldAmount;
+        Integer oldBatchNr = existing.getBrewingProtocol().getBatchNr();
+        Integer newBatchNr = updatedBottling.getBrewingProtocol().getBatchNr();
 
-        Integer batchNr = existing.getBrewingProtocol().getBatchNr();
-        List<Inventory> inventories = inventoryRepository.findByBatchNr(batchNr);
+        if (!oldBatchNr.equals(newBatchNr)) {
+            // Check if another bottling already uses this new batchNr
+            boolean batchInUse = bottlingRepository.findAll().stream()
+                    .anyMatch(b -> !b.getBottlingID().equals(id) && b.getBrewingProtocol().getBatchNr().equals(newBatchNr));
 
+            if (batchInUse) {
+                throw new IllegalStateException("A bottling already exists for batch number " + newBatchNr);
+            }
+        }
+
+        List<Inventory> inventories = inventoryRepository.findByBatchNr(oldBatchNr);
         if (inventories.isEmpty()) {
-            throw new NotFoundException("Inventory for batch " + batchNr + " not found");
+            throw new NotFoundException("Inventory for batch " + oldBatchNr + " not found");
         }
 
         Inventory inventory = inventories.get(0);
         int currentInventory = inventory.getInventoryAmount();
+        int delta = updatedBottling.getAmount() - existing.getAmount();
         int projectedInventory = currentInventory + delta;
 
-        // Get how much has already been ordered from this batch
-        Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(batchNr);
+        Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(oldBatchNr);
         if (orderedAmount == null) orderedAmount = 0;
 
-        // Prevent reducing inventory below ordered quantity
         if (projectedInventory < orderedAmount) {
-            throw new IllegalStateException(
-                "Cannot reduce bottling: would drop inventory below ordered amount (" + orderedAmount + ")"
-            );
+            throw new IllegalStateException("Cannot reduce bottling: would drop inventory below ordered amount (" + orderedAmount + ")");
         }
 
-        // Apply inventory update
-        inventory.setInventoryAmount(projectedInventory);
-        inventoryRepository.save(inventory);
+        BrewingProtocol newProtocol = brewingProtocolRepository.findById(newBatchNr)
+                .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
 
-        // Update bottling fields
-        existing.setAmount(newAmount);
+        existing.setAmount(updatedBottling.getAmount());
         existing.setBottlingDate(updatedBottling.getBottlingDate());
         existing.setFinalGravity(updatedBottling.getFinalGravity());
-
-        BrewingProtocol fullProtocol = brewingProtocolRepository.findById(batchNr)
-                .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
-        existing.setBrewingProtocol(fullProtocol);
-
+        existing.setBrewingProtocol(newProtocol);
         setExpirationDate(existing);
+
+        inventory.setInventoryAmount(projectedInventory);
+        inventory.setBatchNr(newBatchNr);
+        inventory.setInventoryCategoryName(newProtocol.getRecipe().getRecipeName());
+        inventoryRepository.save(inventory);
+
         return bottlingRepository.save(existing);
     }
+
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
@@ -104,26 +133,33 @@ public class BottlingService {
                 .orElseThrow(() -> new NotFoundException("Bottling not found"));
 
         Integer batchNr = existing.getBrewingProtocol().getBatchNr();
-
         List<Inventory> inventories = inventoryRepository.findByBatchNr(batchNr);
+
         if (inventories.isEmpty()) {
             throw new NotFoundException("Inventory for batch " + batchNr + " not found");
         }
 
         Inventory inventory = inventories.get(0);
         int currentInventory = inventory.getInventoryAmount();
-        int remainingAfterDeletion = currentInventory - existing.getAmount();
 
         Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(batchNr);
         if (orderedAmount == null) orderedAmount = 0;
 
+        int totalInventory = getTotalInventoryByBatch(batchNr);
+        int remainingAfterDeletion = totalInventory - currentInventory;
+
         if (remainingAfterDeletion < orderedAmount) {
-            throw new IllegalStateException(
-                "Cannot delete bottling: would drop inventory below ordered amount (" + orderedAmount + ")"
-            );
+            throw new IllegalStateException("Cannot delete bottling: would drop inventory below ordered amount (" + orderedAmount + ")");
         }
 
-        inventoryService.removeInventoryForBatch(batchNr);
+        String category = inventory.getInventoryCategoryName();
+        int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
+
+        inventoryRepository.delete(inventory);
+
+        int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
+        handleThresholdChange(category, totalBefore, totalAfter);
+
         bottlingRepository.delete(existing);
     }
 
@@ -142,6 +178,28 @@ public class BottlingService {
             calendar.setTime(bottling.getBottlingDate());
             calendar.add(Calendar.DAY_OF_YEAR, 180);
             bottling.setExpirationDate(calendar.getTime());
+        }
+    }
+
+    private Map<String, Integer> getTotalInventoryByCategory() {
+        return inventoryRepository.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        Inventory::getInventoryCategoryName,
+                        Collectors.summingInt(Inventory::getInventoryAmount)
+                ));
+    }
+
+    private int getTotalInventoryByBatch(Integer batchNr) {
+        return inventoryRepository.findByBatchNr(batchNr).stream()
+                .mapToInt(Inventory::getInventoryAmount)
+                .sum();
+    }
+
+    private void handleThresholdChange(String category, int totalBefore, int totalAfter) {
+        if (totalBefore >= 72 && totalAfter < 72) {
+            alertService.triggerLowInventoryAlert(category, totalAfter);
+        } else if (totalBefore < 72 && totalAfter >= 72) {
+            alertService.resolveAlertIfRecovered(category, totalAfter);
         }
     }
 }
