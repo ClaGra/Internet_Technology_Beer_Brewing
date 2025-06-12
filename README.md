@@ -252,30 +252,61 @@ Based on the UC-4, there will be two offers and a standard offer. Given a locati
 ### Business Logic 
 Our application follows four key business logic rules to ensure efficiency, legal compliance, and data integrity. First, automated inventory management updates stock levels in real-time based on events like bottling and orders, removing the need for manual tracking. Second, an alert system monitors inventory and triggers warnings when levels fall below a set threshold. Third, age verification checks are performed during order entry to ensure customers are at least 16 years old. Finally, deletion restrictions prevent critical data—like recipes or bottling records linked to brewing or orders—from being removed.
 
+The full API documentation is available via Swagger at: [Swagger UI Documentation](https://internet-technology-beer-brewing.onrender.com/swagger-ui/index.html)
+
+
 **Logic Description**
 
-1. Automated Inventory Management
-	- When an employee places a customer order, the system deducts the ordered quantity from the inventory.
-	- When a batch is bottled, the finished product is added to the inventory.
+***1. Automated Inventory Management***
 
-2. Alert System
-	- If stock drops below 72 units, an alert is triggered.
-	- If stock reaches 72 units or more, the alert is resolved (deleted or marked inactive).
+When an employee places a customer order (POST /api/orders):
+- The system receives the order request, including product IDs and quantities.
+- For each product, the system checks current stock levels.
+- If stock is sufficient, the ordered quantity is deducted from inventory.
+- If stock is insufficient for any item, the order is rejected.
+- After inventory deduction, the system checks if any product now falls below the alert threshold (72 units).
 
-3. Age Verification
-	- During order entry, the system checks that the customer is at least 16 years old based on their birthdate.
+When a batch is bottled (POST /api/bottling):
+- The system receives the bottling request, including product ID and produced quantity.
+- The finished quantity is added to inventory.
+- If stock rises to 72 or more, any active low-stock alert for that product is automatically resolved.
 
-4. Security / Deletion Rules
-	- A recipe cannot be deleted if it has been used in a brewing protocol.
-	- A bottling record cannot be deleted if it is linked to a customer order.
+***2. Alert Syetem***
+
+After each inventory change (order or bottling):
+- The system evaluates the stock level of the affected product.
+- If stock falls below 72, the system:
+- Checks if an alert already exists.
+- If not, creates a new alert for that product.
+- If stock rises to 72 or above, any existing alert is resolved (either deleted or marked inactive).
+
+***3. Age Verification***
+During customer creationg (POST /api/customers):
+- The system receives the customer data, including birthdate.
+- It calculates the age by comparing the birthdate to the current date.
+- If the customer is under 16, the system rejects the creation request with an error.
+- If the customer is 16 or older, the customer is created successfully.
+
+***4. Security / Deletion Rules***
+
+Recipe Deletion (DELETE /api/recipes/:id):
+- When a delete request is received for a recipe, the system checks if the recipe is referenced by any brewing protocol.
+- If referenced, deletion is blocked and an error is returned.
+- If not referenced, the recipe is deleted.
+
+Bottling Deletion (DELETE /api/bottling/:id):
+- When a delete request is received for a bottling record, the system checks if the bottling is linked to any customer orders.
+- If linked, deletion is blocked and an error is returned.
+- If not linked, the bottling record is deleted.
 
 
-Relevant API Endpoints
+
 | Action          | HTTP Method | Endpoint            | Triggered Logic                                                 |
 | --------------- | ----------- | ------------------- | --------------------------------------------------------------- |
-| Place Order     | POST        | `/api/orders`       | Reduce inventory, trigger alert if <72, show age warning if <16 |
+| Place Order     | POST        | `/api/orders`       | Reduce inventory, check stock levels                            |
 | Finish Bottling | POST        | `/api/bottling`     | Increase inventory, resolve alert if stock ≥72                  |
 | View Alerts     | GET         | `/api/alerts`       | Display all active low-stock alerts                             |
+| Create Customer | POST        | `/api/customers`    | Check if customer is at least 16 years old                      |
 | Delete Recipe   | DELETE      | `/api/recipes/:id`  | Block if recipe is used in a brewing protocol                   |
 | Delete Bottling | DELETE      | `/api/bottling/:id` | Block if bottling is referenced by an order                     |
 
