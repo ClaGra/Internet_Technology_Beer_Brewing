@@ -100,12 +100,13 @@ The Excel sheet does not give any insights about specific customers or their ord
 > Note: In the following use case descriptions, the term user includes both regular users and admins.
 
 #### Use Case 100 Order
-![image](https://github.com/user-attachments/assets/0b3f9cc6-137f-477d-bee6-c99b1c805c0a)
+![image](https://github.com/user-attachments/assets/a2b3c04f-c94c-499e-97f1-d4d2cc496e35)
 
 - UC-101 [Add Order]: The system shall allow the user to add new orders through a form. The order data will be stored and reflected in the order list view.
 - UC-102 [Edit Order]: The system shall allow the user to update existing orders. The user selects an order, modifies fields such as date, product quantity, or customer name, and confirms the changes.
 - UC-103 [Delete Order]: The system shall allow the admin to delete an order. This action permanently removes the record from the database after confirmation.
 - UC-104 [View Orders]: The system shall allow the user to view a list of all orders. Each record includes an order ID, date, and action buttons.
+- UC-105 [View Orders by ID]: The system shall allow the user to view an order sorted by ID. The retrieved record includes the order ID, date, and order summary.
 
 #### Use Case 200 Inventory
 ![image](https://github.com/user-attachments/assets/d7fbe49f-c05f-4ee8-8ac3-f3807c7155e3)
