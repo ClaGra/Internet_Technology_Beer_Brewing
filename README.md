@@ -53,13 +53,6 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to view orders by ID so that I can check specific transactions.
 
 #### User Stories Inventory
-1. As a System, I want to automatically update inventory when a bottling or order is added, changed, or deleted, so that real-time stock levels are maintained.
-2. As a User, I want to edit inventory items so that I can correct stock data.
-3. As an Admin, I want to delete inventory items so that I can clean up expired beer.
-4. As a user, I want to view the full inventory so that I understand current stock levels.
-5. As a user, I want to view inventory by ID so that I can check specific items.
-6. As a user, I want to view an inventory summary so that I can get an overview of stock by category.
-
 1. As a System, I want to automatically update inventory when bottling or orders are added, modified, or deleted so that stock levels remain accurate in real time.
 2. As a User, I want to edit inventory items so that I can correct stock data.
 3. As an Admin, I want to delete inventory items so that I can remove expired entries.
