@@ -43,7 +43,6 @@ public class BottlingService {
         BrewingProtocol fullProtocol = brewingProtocolRepository.findById(batchNr)
                 .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
 
-        // Check if a bottling for this protocol already exists
         boolean alreadyExists = bottlingRepository.findAll().stream()
                 .anyMatch(b -> b.getBrewingProtocol().getBatchNr().equals(batchNr));
 
@@ -82,12 +81,16 @@ public class BottlingService {
         Integer newBatchNr = updatedBottling.getBrewingProtocol().getBatchNr();
 
         if (!oldBatchNr.equals(newBatchNr)) {
-            // Check if another bottling already uses this new batchNr
             boolean batchInUse = bottlingRepository.findAll().stream()
                     .anyMatch(b -> !b.getBottlingID().equals(id) && b.getBrewingProtocol().getBatchNr().equals(newBatchNr));
 
             if (batchInUse) {
                 throw new IllegalStateException("A bottling already exists for batch number " + newBatchNr);
+            }
+
+            Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(oldBatchNr);
+            if (orderedAmount != null && orderedAmount > 0) {
+                throw new IllegalStateException("Cannot change the recipe for this bottling because orders have already been placed for this batch.");
             }
         }
 
@@ -108,6 +111,8 @@ public class BottlingService {
             throw new IllegalStateException("Cannot reduce bottling: would drop inventory below ordered amount (" + orderedAmount + ")");
         }
 
+        Map<String, Integer> inventoryBefore = getTotalInventoryByCategory();
+
         BrewingProtocol newProtocol = brewingProtocolRepository.findById(newBatchNr)
                 .orElseThrow(() -> new NotFoundException("Brewing Protocol not found"));
 
@@ -122,9 +127,17 @@ public class BottlingService {
         inventory.setInventoryCategoryName(newProtocol.getRecipe().getRecipeName());
         inventoryRepository.save(inventory);
 
+        Map<String, Integer> inventoryAfter = getTotalInventoryByCategory();
+        String category = inventory.getInventoryCategoryName();
+
+        handleThresholdChange(
+                category,
+                inventoryBefore.getOrDefault(category, 0),
+                inventoryAfter.getOrDefault(category, 0)
+        );
+
         return bottlingRepository.save(existing);
     }
-
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
@@ -140,13 +153,12 @@ public class BottlingService {
         }
 
         Inventory inventory = inventories.get(0);
-        int currentInventory = inventory.getInventoryAmount();
 
         Integer orderedAmount = orderRepository.getTotalOrderedAmountByBatch(batchNr);
         if (orderedAmount == null) orderedAmount = 0;
 
         int totalInventory = getTotalInventoryByBatch(batchNr);
-        int remainingAfterDeletion = totalInventory - currentInventory;
+        int remainingAfterDeletion = totalInventory - inventory.getInventoryAmount();
 
         if (remainingAfterDeletion < orderedAmount) {
             throw new IllegalStateException("Cannot delete bottling: would drop inventory below ordered amount (" + orderedAmount + ")");
@@ -156,6 +168,7 @@ public class BottlingService {
         int totalBefore = getTotalInventoryByCategory().getOrDefault(category, 0);
 
         inventoryRepository.delete(inventory);
+        inventoryRepository.flush(); // Ensure deletion is committed
 
         int totalAfter = getTotalInventoryByCategory().getOrDefault(category, 0);
         handleThresholdChange(category, totalBefore, totalAfter);
