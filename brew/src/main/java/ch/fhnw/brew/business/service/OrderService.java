@@ -36,13 +36,11 @@ public class OrderService {
     public Order addOrder(Order order) {
         order.setOrderDate(LocalDate.now());
 
-        // Load full customer details
         Integer customerId = order.getCustomer().getCustomerID();
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException("Customer not found"));
         order.setCustomer(customer);
 
-        // Check availability before deducting — collect all errors
         List<String> stockErrors = new ArrayList<>();
 
         for (OrderItem item : order.getItems()) {
@@ -60,7 +58,6 @@ public class OrderService {
             throw new IllegalStateException(String.join("; ", stockErrors));
         }
 
-        // Inventory deduction and processing
         List<OrderItem> processedItems = new ArrayList<>();
 
         for (OrderItem item : order.getItems()) {
@@ -91,9 +88,7 @@ public class OrderService {
                 }
             }
 
-            // Trigger alert if remaining inventory falls below threshold
-            int totalRemaining = inventoryRepository.findByInventoryCategoryName(item.getBeerName())
-                    .stream()
+            int totalRemaining = inventoryRepository.findByInventoryCategoryName(item.getBeerName()).stream()
                     .mapToInt(Inventory::getInventoryAmount)
                     .sum();
 
@@ -111,7 +106,8 @@ public class OrderService {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
-        // Restore previous inventory
+        Map<String, Integer> totalBefore = getTotalInventoryByCategory();
+
         for (OrderItem item : existing.getItems()) {
             List<Inventory> matching = inventoryRepository.findByBatchNr(item.getBatchNumber());
             for (Inventory inv : matching) {
@@ -120,11 +116,19 @@ public class OrderService {
             }
         }
 
-        // Set metadata and validate via addOrder
         updatedOrder.setOrderID(existing.getOrderID());
         updatedOrder.setOrderDate(existing.getOrderDate());
 
-        return addOrder(updatedOrder);
+        Order saved = addOrder(updatedOrder);
+
+        Map<String, Integer> totalAfter = getTotalInventoryByCategory();
+        for (String category : totalBefore.keySet()) {
+            handleThresholdChange(category,
+                    totalBefore.getOrDefault(category, 0),
+                    totalAfter.getOrDefault(category, 0));
+        }
+
+        return saved;
     }
 
     @Transactional
@@ -133,7 +137,8 @@ public class OrderService {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
-        // Restore inventory before deletion
+        Map<String, Integer> totalBefore = getTotalInventoryByCategory();
+
         for (OrderItem item : existing.getItems()) {
             List<Inventory> matching = inventoryRepository.findByBatchNr(item.getBatchNumber());
             for (Inventory inv : matching) {
@@ -143,6 +148,13 @@ public class OrderService {
         }
 
         orderRepository.delete(existing);
+
+        Map<String, Integer> totalAfter = getTotalInventoryByCategory();
+        for (String category : totalBefore.keySet()) {
+            handleThresholdChange(category,
+                    totalBefore.getOrDefault(category, 0),
+                    totalAfter.getOrDefault(category, 0));
+        }
     }
 
     public Order getOrder(Integer id) {
@@ -152,5 +164,21 @@ public class OrderService {
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
+    }
+
+    private Map<String, Integer> getTotalInventoryByCategory() {
+        return inventoryRepository.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        Inventory::getInventoryCategoryName,
+                        Collectors.summingInt(Inventory::getInventoryAmount)
+                ));
+    }
+
+    private void handleThresholdChange(String category, int totalBefore, int totalAfter) {
+        if (totalBefore >= 72 && totalAfter < 72) {
+            alertService.triggerLowInventoryAlert(category, totalAfter);
+        } else if (totalBefore < 72 && totalAfter >= 72) {
+            alertService.resolveAlertIfRecovered(category, totalAfter);
+        }
     }
 }
