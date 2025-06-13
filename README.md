@@ -53,7 +53,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to view orders by ID so that I can check specific transactions.
 
 #### User Stories Inventory
-1. As a System, I want to automatically update inventory when bottling and orders are added, modified, or deleted so that stock levels remain accurate in real time.
+1. As a User, I want to automatically update inventory when bottling and orders are added, modified, or deleted so that stock levels remain accurate in real time.
 2. As a User, I want to edit inventory items so that I can correct stock data.
 3. As an Admin, I want to delete inventory items so that I can remove expired or invalid entries.
 4. As a User, I want to view the full inventory so that I can monitor current stock levels.
@@ -89,9 +89,9 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to view recipes by ID so that I can access specific detailed information.
 
 #### User Stories Alert 
-1. As a System, I want to automatically create alerts when inventory is low so that users are notified in time.
+1. As a User, I want to automatically create alerts when inventory is low so that users are notified in time.
 2. As a User, I want to delete alerts so that I can clear resolved or irrelevant notifications.
-3. As a System, I want to automatically remove alerts when inventory is replenished so that only current warnings remain.
+3. As a User, I want to automatically remove alerts when inventory is replenished so that only current warnings remain.
 
 
 
@@ -153,7 +153,8 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-605 [View Recipe by ID]: The system shall allow the user to view recipe category sorted by ID. The list displays recipe names, recipe category, and recipe category label.
 
 #### Use Case 700 Alert
-![image](https://github.com/user-attachments/assets/f78d80d6-1bd1-4f11-b450-ea7d64f539b4)
+![image](https://github.com/user-attachments/assets/47d7bc24-12e3-4104-ac45-6988f391c187)
+
 
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72. The alert includes details such as the affected category and current inventory level.
 - UC-702 [View Alert]: The system shall allow the user to view all current alerts with related inventory details. The list displays the category and the current quantity.
