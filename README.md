@@ -35,7 +35,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 
 ### User Stories
 > Note: Admins have the same access and permissions as regular Users, with the additional ability to delete data.
-
+ 
 #### User Stories General
 1. As a User, I want to use the web app on both mobile devices and desktop computers so that I can access it from anywhere.
 2. As a User, I want a consistent visual design so that I can navigate the app easily.
@@ -44,122 +44,121 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to log in so that I can securely access the application.
 6. As a User, I want to log out so that I can securely end my session.
 7. As an Admin, I want to authenticate myself so that I can access the delete functionality, which is restricted to Admins.
-
+ 
 #### User Stories Order
 1. As a User, I want to add new orders so that I can record customer purchases.
 2. As a User, I want to edit existing orders so that I can update order details if needed.
 3. As an Admin, I want to delete orders so that I can remove cancelled or invalid transactions.
 4. As a User, I want to view all orders so that I can track sales activity.
 5. As a User, I want to view orders by ID so that I can check specific transactions.
-
+ 
 #### User Stories Inventory
-1. As a User, I want to automatically update inventory when bottling and orders are added, modified, or deleted so that stock levels remain accurate in real time.
+1. As a User, I want the system to automatically update inventory when bottling and orders are added, modified, or deleted so that stock levels remain accurate in real time.
 2. As a User, I want to edit inventory items so that I can correct stock data.
-3. As an Admin, I want to delete inventory items so that I can remove expired or invalid entries.
+3. As an Admin, I want to delete inventory items so that I can remove expired.
 4. As a User, I want to view the full inventory so that I can monitor current stock levels.
-5. As a User, I want to view inventory by ID so that I can locate specific stock items.
-6. As a User, I want to view an inventory summary so that I can get an overview by category.
-
+5. As a User, I want to view an inventory summary so that I can get an overview by category.
+6. As a User, I want to view inventory by ID so that I can check specific stock items.
+ 
 #### User Stories Brewing Protocols
 1. As a User, I want to add new brewing protocols so that brewing processes are documented.
 2. As a User, I want to edit brewing protocols so that I can update brewing information.
-3. As an Admin, I want to delete brewing protocols so that I can remove outdated or incorrect records.
-4. As a User, I want to view brewing protocols so that I can understand the production process.
+3. As an Admin, I want to delete brewing protocols so that I can remove incorrect records.
+4. As a User, I want to view brewing protocols so that I can monitor the production process.
 5. As a User, I want to view brewing protocols by ID so that I can reference specific batches.
-
+ 
 #### User Stories Bottling 
 1. As a User, I want to add bottling records so that packaging is documented.
 2. As a User, I want to edit bottling records so that I can update packaging information.
-3. As an Admin, I want to delete bottling records so that I can correct errors or remove invalid entries.
+3. As an Admin, I want to delete bottling records so that I can remove invalid entries.
 4. As a User, I want to view bottling records so that I can see packaging status.
 5. As a User, I want to view bottling records by ID so that I can look up specific batches.
-
+ 
 #### User Stories Customer 
 1. As a User, I want to add new customers so that I can manage client information.
 2. As a User, I want to edit customer data so that I can keep records accurate.
-3. As an Admin, I want to delete customers so that I can remove outdated or incorrect entries.
+3. As an Admin, I want to delete customers so that I can remove incorrect entries.
 4. As a User, I want to view all customers so that I can see our client base.
-5. As a User, I want to view customers by ID so that I can quickly locate someone.
-
+5. As a User, I want to view customers by ID so that I can look up specific information.
+ 
 #### User Stories Recipe 
-1. As a User, I want to add new recipes so that I can register new recipe so that I can document different beer types and categories.
+1. As a User, I want to add new recipes so that I can document different beer types and categories.
 2. As a User, I want to edit recipes so that I can update information as needed.
-3. As an Admin, I want to delete recipes so that I can remove invalid or outdated entries.
+3. As an Admin, I want to delete recipes so that I can remove invalid entries.
 4. As a User, I want to view all recipes so that I can get an overview of available recipes.
 5. As a User, I want to view recipes by ID so that I can access specific detailed information.
-
+ 
 #### User Stories Alert 
-1. As a User, I want to automatically create alerts when inventory is low so that users are notified in time.
-2. As a User, I want to delete alerts so that I can clear resolved or irrelevant notifications.
-3. As a User, I want to automatically remove alerts when inventory is replenished so that only current warnings remain.
+1. As a User, I want the system to automatically create alerts when inventory is low so that I am notified in time.
+2. As a User, I want to delete alerts so that I can clear notifications of categories no longer used.
+3. As a User, I want the system to automatically remove alerts when inventory is replenished so that only current warnings remain.
 
 
 
 ### Use Case
-
+ 
 > Note: In the following use case descriptions, the term user includes both regular users and admins.
-
+ 
 #### Use Case 100 Order
-![image](https://github.com/user-attachments/assets/a2b3c04f-c94c-499e-97f1-d4d2cc496e35)
-
+![image](https://github.com/user-attachments/assets/44315eac-8888-4653-acae-cb5091f5952b)
+ 
 - UC-101 [Add Order]: The system shall allow the user to add new orders through a form. The order data will be stored and reflected in the order list view.
 - UC-102 [Edit Order]: The system shall allow the user to update existing orders. The user selects an order, modifies fields such as date, product quantity, or customer name, and confirms the changes.
 - UC-103 [Delete Order]: The system shall allow the admin to delete an order. This action permanently removes the record from the database after confirmation.
 - UC-104 [View Orders]: The system shall allow the user to view a list of all orders. Each record includes an order ID, date, and action buttons.
-- UC-105 [View Orders by ID]: The system shall allow the user to view an order sorted by ID. The retrieved record includes the order ID, date, and order summary.
-
+ 
 #### Use Case 200 Inventory
 ![image](https://github.com/user-attachments/assets/d7fbe49f-c05f-4ee8-8ac3-f3807c7155e3)
-
-- UC-201 [Edit Inventory]: The system shall allow the user to edit existing inventory items. Additionally, the system shall automatically edit the inventory based on newly created orders. 
+ 
+- UC-201 [Edit Inventory]: The system shall allow the user to edit existing inventory items. Additionally, the system shall automatically update inventory when bottling and orders are added, modified, or deleted. 
 - UC-202 [Delete Inventory]: The system shall allow the admin to delete inventory items. This action permanently removes the item from the inventory after confirmation.
 - UC-203 [View Inventory]: The system shall allow the user to view the inventory. The list displays item  names, quantities, batch number and expiration Date.
 - UC-204 [View Inventory by ID]: The system shall allow the user to view the inventory sorted by ID. The list displays item  names, quantities, batch number and expiration Date.
 - UC-205 [View Inventory Summary]: The system shall allow the user to view the inventory summary. The summary displays item names and total quantities.
-
+ 
 #### Use Case 300 Brewing
 ![image](https://github.com/user-attachments/assets/6127b51d-4d0c-43bd-b8c3-e0c0c40267f2)
-
+ 
 - UC-301 [Add Brewing Protocol]: The system shall allow the user to add a new brewing protocol. The user provides details such as recipe, brewing date, and process parameters.
 - UC-302 [Edit Brewing Protocol]: The system shall allow the user to edit an existing brewing protocol. The user can modify fields such as recipe, brewing date, and process parameters.
 - UC-303 [Delete Brewing Protocol]: The system shall allow the admin to delete a brewing protocol. This action permanently removes the brewing protocol from the system after confirmation.
 - UC-304 [View Brewing Protocol]: The system shall allow the user to view brewing protocols. The list displays brewing dates, recipes, and process parameters.
 - UC-305 [View Brewing Protocol by ID]: The system shall allow the user to view brewing protocols sorted by ID. The list displays brewing dates, recipes, and process parameters.
-
+ 
 #### Use Case 400 Bottling
 ![image](https://github.com/user-attachments/assets/a712c184-6219-4a0b-9f11-ebb8302a0eb8)
-
+ 
 - UC-401 [Add Bottling]: The system shall allow the user to add a new bottling record. The user provides details such as bottling date, expiration date, quantity, and batch number.
 - UC-402 [Edit Bottling]: The system shall allow thee user to edit an existing bottling record. The user can modify fields such as bottling date, expiration date, quantity, and batch number.
 - UC-403 [Delete Bottling]: The system shall allow the admin to delete a bottling record. This action permanently removes the record from the system after confirmation.
 - UC-404 [View Bottling]: The system shall allow the user to view bottling record. The list displays bottling dates, expiration date, quantities, and batch numbers.
 - UC-405 [View Bottling by ID]: The system shall allow the user to view bottling record sorted by ID. The list displays bottling dates, expiration date, quantities, and batch numbers.
-
+ 
 #### Use Case 500 Customer
 ![image](https://github.com/user-attachments/assets/83313a6c-a445-4b0c-ad12-8b92f0817cc6)
-
+ 
 - UC-501 [Add Customer]: The system shall allow the user to add a new customer. The user provides details such as customer name, contact information address, date of birth.
 - UC-502 [Edit Customer]: The system shall allow the user to edit an existing customer. The user can modify fields such as customer name, contact information address, date of birth.
 - UC-503 [Delete Customer]: The system shall allow the admin to delete a customer. This action permanently removes the customer from the system after confirmation.
 - UC-504 [View Customer]: The system shall allow the user to view customer information. The list displays customer names, contact information address, date of birth.
 - UC-505 [View Customer by ID]: The system shall allow the user to view customer information sorted by ID. The list displays customer names, contact information address, date of birth.
-
+ 
 #### Use Case 600 Recipe
 ![image](https://github.com/user-attachments/assets/16f720fc-000a-4155-b753-057da7da24d2)
-
+ 
 - UC-601 [Add Recipe]: The system shall allow the user to add a new recipe category. The user provides details such as recipe name, recipe category, and recipe category label.
 - UC-602 [Edit Recipe]: The system shall allow the user to edit an existing recipe category. The user can modify fields such as recipe name, recipe category, and recipe category label.
 - UC-603 [Delete Recipe]: The system shall allow the admin to delete a recipe category. This action permanently removes the category from the system after confirmation.
 - UC-604 [View Recipe]: The system shall allow the user to view recipe category. The list displays recipe names, recipe category, and recipe category label.
 - UC-605 [View Recipe by ID]: The system shall allow the user to view recipe category sorted by ID. The list displays recipe names, recipe category, and recipe category label.
-
+ 
 #### Use Case 700 Alert
 ![image](https://github.com/user-attachments/assets/47d7bc24-12e3-4104-ac45-6988f391c187)
-
-
+ 
+ 
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72. The alert includes details such as the affected category and current inventory level.
 - UC-702 [View Alert]: The system shall allow the user to view all current alerts with related inventory details. The list displays the category and the current quantity.
-- UC-703 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category rises above 72 units. 
+- UC-703 [Delete Alert]: The system shall allow the admin to delete an existing alert. Additionally, the system shall automatically delete an existing alert when the inventory per category rises above 72 units.
 
 
 ## Design
