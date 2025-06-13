@@ -184,16 +184,16 @@ The image on the landing page supports the brand’s identity and creates a stro
 	- Detail/edit options via view, edit, delete icons
 - Highlights are used for:
 	- Important system alerts (like deletion confirmation)
-- Action buttons (e.g., “+ Add Brewing,” “Save,” “Discard”) are grouped for clear workflows and use icon support where possible
+- Action buttons (e.g., “View,” “Edit,” “Delete”) are grouped for clear workflows and use icon support where possible
 
 ## Responsive & Accessible Design
-- The interface is optimized for both desktop and mobile views using a clean layout and sufficient padding
 - Interactive elements are large enough for touch devices and designed with contrast for accessibility
 - Labels, forms, and dropdowns support efficient data input with reduced user error
   
 ### Wireframe
 
-Starting from the home page, we can visit different pages. Available public pages are visible in the menu...
+After logging in, users can navigate to different pages via the navigation page. Only the login page is publicly accessible.
+
 ![image](https://github.com/user-attachments/assets/f3f6e155-38d6-4c47-802f-01909e2c3294)
 
 ## Landing Page:
@@ -220,6 +220,7 @@ Starting from the home page, we can visit different pages. Available public page
 
 ### Prototype
 The image shows an initial draft of the platform’s user interface created in Budibase, serving as a visual concept for the system’s basic structure and layout.
+
 ![image](https://github.com/user-attachments/assets/900150f3-af71-411e-ba3c-9c2d4453c3f5)
 
 ### Domain Design
@@ -237,47 +238,46 @@ The full API documentation is available via Swagger at: [Swagger UI Documentatio
 **Logic Description**
 
 ***1. Automated Inventory Management***
+The inventory system automatically updates stock levels based on customer and bottling activities:
 
-When an employee places a customer order (POST /api/orders):
-- The system receives the order request, including product IDs and quantities.
-- For each product, the system checks current stock levels.
-- If stock is sufficient, the ordered quantity is deducted from inventory.
-- If stock is insufficient for any item, the order is rejected.
-- After inventory deduction, the system checks if any product now falls below the alert threshold (72 units).
+Orders (POST, PUT, DEL /api/orders):
+- When an order is placed or updated, the system verifies if enough stock is available for all ordered products.
+- If stock is sufficient, the ordered amounts are deducted from inventory.
+- If stock is insufficient, the order is rejected.
+- When an order is deleted, the previously reserved stock is returned to inventory.
 
-When a batch is bottled (POST /api/bottling):
-- The system receives the bottling request, including product ID and produced quantity.
-- The finished quantity is added to inventory.
-- If stock rises to 72 or more, any active low-stock alert for that product is automatically resolved.
+Bottling (POST, PUT, DEL /api/bottling):
+- When production is recorded or updated, the produced amounts are adjusted in the inventory.
+- When a production record is deleted, the corresponding stock is reduced.
 
 ***2. Alert Syetem***
 
-After each inventory change (order or bottling):
+After each inventory change (POST, PUT, DEL on /api/orders or /api/bottling):
 - The system evaluates the stock level of the affected product.
 - If stock falls below 72, the system:
-- Checks if an alert already exists.
-- If not, creates a new alert for that product.
-- If stock rises to 72 or above, any existing alert is resolved (either deleted or marked inactive).
+	- Checks if an alert already exists.
+	- If not, creates a new alert for that product.
+- If stock rises to 72 units or above
+	- Any existing alert is resolved.
 
 ***3. Age Verification***
-During customer creationg (POST /api/customers):
-- The system receives the customer data, including birthdate.
-- It calculates the age by comparing the birthdate to the current date.
-- If the customer is under 16, the system rejects the creation request with an error.
-- If the customer is 16 or older, the customer is created successfully.
+During customer creationg and adjusting (POST, PUT /api/customers):
+- When customer data is created or adjusted, the system checks the provided birthdate.
+- If the customer is younger than 16, the request is rejected with an error.
+- If the customer is 16 or older, the customer data is saved successfully.
 
 ***4. Security / Deletion Rules***
+The system enforces multiple business rules to ensure data consistency, such as:
 
-Recipe Deletion (DELETE /api/recipes/:id):
-- When a delete request is received for a recipe, the system checks if the recipe is referenced by any brewing protocol.
+Recipe Deletion (DELETE /api/recipes):
+- When a delete request is received, the system checks if the recipe is referenced by any brewing protocol.
 - If referenced, deletion is blocked and an error is returned.
 - If not referenced, the recipe is deleted.
 
-Bottling Deletion (DELETE /api/bottling/:id):
-- When a delete request is received for a bottling record, the system checks if the bottling is linked to any customer orders.
+Bottling Deletion (DELETE /api/bottling):
+- When a delete request is received, the system checks if the bottling record is linked to any customer orders.
 - If linked, deletion is blocked and an error is returned.
 - If not linked, the bottling record is deleted.
-
 
 
 | Action          | HTTP Method | Endpoint            | Triggered Logic                                                 |
@@ -359,7 +359,7 @@ https://internet-technology-beer-brewing.onrender.com
 | View                 | Purpose                                     | HTTP Methods Used      | API Endpoint(s)          | Entity/Entities Involved   |
 | -------------------- | ------------------------------------------- | ---------------------- | ------------------------ | -------------------------- |
 | **Home**             | Display current system alerts               | GET                    | `/api/alerts`            | `Alert`                    |
-| **Login**            | Authenticate users using form-based login   | POST                   | `/login`                 | `User` (in-memory only)    |
+| **Login**            | Authenticate users using form-based login   | GET                    | `/login`                 | `User` (in-memory only)    |
 | **Brewing Protocol** | Create, edit, and delete brewing procedures | GET, POST, PUT, DELETE | `/api/brewing-protocols` | `BrewingProtocol`          |
 | **Recipes**          | Manage beer recipes and categories          | GET, POST, PUT, DELETE | `/api/recipes`           | `Recipe`, `RecipeCategory` |
 | **Inventory**        | Monitor current stock and make adjustments  | GET, PUT               | `/api/inventory`         | `Inventory`                |
@@ -368,45 +368,42 @@ https://internet-technology-beer-brewing.onrender.com
 | **Customers**        | Manage customer profiles and data           | GET, POST              | `/api/customers`         | `Customer`                 |
 | **Alerts**           | View currently active low-stock alerts      | GET                    | `/api/alerts`            | `Alert`                    |
 
-### Constraints in Budibase
-While Budibase provides a fast and flexible way to build internal tools, some limitations were encountered during development:
-- Data validation is limited in the UI: complex rules (e.g. age checks) must be handled on the backend.
-- Dynamic form behavior (e.g. conditional logic or calculated fields) is not natively supported and requires workarounds.
-- UI customization options are somewhat limited compared to fully custom-coded solutions.
-- API integration is smooth for basic CRUD operations, but more complex workflows need careful structuring on the backend side.
-- XXX
-- XXX
 
+### Constraints in Budibase
+As discussed, here is a summary of the identified constraints and issues encountered on the frontend:
+- Button Display: Only 3 out of 4 (or 5) buttons were displayed. (Resolved by applying a different approach.)
+- Order Functionality: The ordering process does not work as intended.
+- Loading Behavior: On second click, certain fields automatically pre-fill (e.g. in Bottling or Brewing Protocol forms).
+- Dropdown Filtering for Bottling: When adding a new bottling entry, only batches without existing bottling records should appear. A constraint was planned to filter the dropdown accordingly.
+
+![Bild1](https://github.com/user-attachments/assets/c7f6f160-208a-4b07-b33a-ddbb653989dd)
+
+ 
 ## Execution
-To run the Beer Brewing platform, both the backend service (Spring Boot) and the Budibase frontend must be started and connected correctly.
+To run the Beer Brewing platform, both the backend service (Render) and the Budibase frontend must be started and connected correctly.
 
 1. Start the Render Application
+
 Open the backend hosted on Render via the following URL:
 https://internet-technology-beer-brewing.onrender.com
+
 This may take up to 5 minutes to wake up from sleep mode.
 
 2. Open the Budibase Application
-In the Budibase environment for the class, open the app named:
-Brugg 1_BeerBrewing
+
+In the Budibase environment for the class, open the app named Brugg 1_BeerBrewing via following URL:
 https://inttech.budibase.app
 
 ### Login
 To access the Beer Brewing platform, two user accounts are available:
 
 Admin Account:
-Username: myadmin
-Password: passwort
+- Username: myadmin
+- Password: password
 
 User Account:
-Username: myuser
-Password: passwort
-
-### Notes
-Backend URL Configuration:
-The Budibase app fetches data from the backend. If the backend URL changes or becomes unavailable (e.g., due to Render codespace resets), you will need to update the data source URL in Budibase.
-
-No Data Shown?
-If the Budibase app loads but no data is visible in the views, ensure that the Render backend is fully running. If the issue persists, verify that the correct URL is configured in Budibase.
+- Username: myuser
+- Password: password
 
 
 ### Deployment to a PaaS
@@ -416,19 +413,19 @@ To make the application accessible online without needing to restart a local ser
 The project of the web application for the Brauverein Full was developed collaboratively by a team of four. Roles and responsibilities were  divided, and the team coordinated progress through regular meetings and shared documentation.
 
 ### Roles
-- **Back-end developer: Claudia Graf, Soheyla Tofighi** 
+- **Back-end developer: Claudia Graf (Leader), Soheyla Tofighi, Tuangporn Siwaboon, Yannik Stöckli** 
 
 They implemented the backend logic using Spring Boot. They defined the core entities (e.g., BrewingProtocol, Recipe, Inventory, User) and developed RESTful endpoints to support the platform’s functionalities, such as managing brewing steps, orders, and alerts.
 
-- **Front-end developer: Soheyla Tofighi, Claudia Graf**
+- **Front-end developer: Soheyla Tofighi (Leader), Claudia Graf, Tuangporn Siwaboon, Yannik Stöckli**
 
 They built the user interface using Budibase. They designed and connected frontend views to the backend services, enabling intuitive interaction with the system for different user roles.
 
-- **Documentation, Presentation & Project Coordinator: Tuangporn Siwaboon, Yannik Stöckli**
+- **Documentation, Presentation & Project Coordinator: Tuangporn Siwaboon (Leader), Yannik Stöckli, Claudia Graf, Soheyla Tofighi**
 
 They coordinated team meetings and responsibilities, ensured timely progress, and created the documentation (e.g., user stories, use cases, and this README). They also prepared and delivered the final presentation.
 
-- **Testing: Claudia Graf, Soheyla Tofighi, Tuangporn Siwaboon, Yannik Stöckli**
+- **Testing: Yannik Stöckli (Leader), Claudia Graf, Soheyla Tofighi, Tuangporn Siwaboon**
 
 The entire team contributed to testing by checking functionalities across the frontend and backend, verifying correct API behavior, UI consistency, and ensuring that all use cases were properly supported.
 
