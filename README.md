@@ -19,15 +19,14 @@
   - [Roles](#roles)
   - [Milestones](#milestones)
 
-## Analysis
-> 🚧: You can reuse the analysis (you made) from other projects (e.g., requirement engineering), but it must be submitted according to the following template. 
+## Analysis 
 
 
 
 ### Scenario
 
 The Brauverein Full is a brewing association based in Full. It was founded in June 2018 by five people who aimed to produce beer for themselves, friends, and families. The reason for the foundation of an association was that the beer of a private individual is legally not allowed to leave the property where it is brewed, which complicated the sharing with other people. Through the small size of the village, which has less than 1000 inhabitants, the word of a local brewery spread, and the association gained in popularity and customers.
-The Brauverein Full has been managing its stock and sales using a self-made Excel sheet that has become increasingly time-consuming, error-prone, and difficult to manage as the association has grown in size and complexity. The association has decided to switch to a webbased application to streamline and automate its inventory management, sales tracking, and reporting processes. The new application will enable the association to track its inventory levels in real-time, automatically generate sales reports, and provide better visibility into its sales trends and stock turnover rates.
+The Brauverein Full has been managing its stock and sales using a self-made Excel sheet that has become increasingly time-consuming, error-prone, and difficult to manage as the association has grown in size and complexity. The association has decided to switch to a webbased application to streamline and automate its inventory management and sales tracking. The new application will enable the association to track its inventory levels in real-time and provide better visibility into its sales trends and stock turnover rates.
 This project aims to improve the efficiency and accuracy of the Brauverein Full’s inventory management and sales tracking, reducing administrative overhead and enabling the association to make data-driven decisions to optimize their operations and meet the needs of their members and customers more effectively. 
 
 The Excel sheet used for the stock and sales management was created by the head of administration of the Brauverein Full. Its purpose is to give the association members a better overview of the inventory levels and decrease the effort at the end of the year to create the report for the customs administration overseeing the taxation of sold beer.
@@ -35,36 +34,43 @@ Since the Excel sheet includes many complex formulas, the remainder of the assoc
 The Excel sheet does not give any insights about specific customers or their orders since the administrative workload is tried to be held as small as possible for the head of administration. With the implementation of a web-based application, this information could be easily added and would provide better visibility into the sales trends.
 
 ### User Stories
+> Note: Admins have the same access and permissions as regular Users, with the additional ability to delete data.
 
 #### User Stories General
-1. As a User, I want to have a Web app to use on different mobile devices and desktop computers.
-2. As a User, I want to see a consistent visual appearance to navigate easily, and it should look consistent.
-3. As a User, I want to use list views to explore and read my business data.
-4. As a User, I want to use edit and create views to maintain my business data.
-5. As a User, I want to log-in so that I can authenticate myself.
-6. As an Admin, I want to authenticate myself so that I can delete data.
+1. As a User, I want to use the web app on both mobile devices and desktop computers so that I can access it from anywhere.
+2. As a User, I want a consistent visual design so that I can navigate the app easily.
+3. As a User, I want to use list views to explore and read my brewery data.
+4. As a User, I want to use edit and create views to maintain my brewery data.
+5. As a User, I want to log in so that I can securely access the application.
+6. As a User, I want to log out so that I can securely end my session.
+7. As an Admin, I want to authenticate myself so that I can access the delete functionality, which is restricted to Admins.
 
-#### User Stories Administration
-1. As a Head of Administration, I want to add user accounts so that I can grant access to new users.
-2. As a User, I want to edit my user account so that I can update user information when necessary.
-3. As a Head of Administration, I want to delete user accounts so that I can remove access when needed.
-4. As a User, I want to log in so that I can access the system securely.
-5. As a User, I want to log out so that I can securely end my session.
+#### User Stories Order
+1. As a User, I want to add new orders so that I can record customer purchases.
+2. As a User, I want to edit existing orders so that I can update order details if needed.
+3. As an Admin, I want to delete orders so that I can remove cancelled or invalid transactions.
+4. As a User, I want to view all orders so that I can track sales activity.
+5. As a User, I want to view orders by ID so that I can check specific transactions.
 
 #### User Stories Inventory
-1. As a User, I want to manually add new inventory items so that I can track stock entries.
-2. As a System, I want to automatically add inventory after brewing or bottling so that the stock stays accurate.
-3. As a User, I want to edit inventory items so that I can correct stock data.
-4. As a System, I want to automatically adjust inventory after an order so that real-time stock levels are maintained.
-5. As an Admin, I want to delete inventory items so that I can clean up invalid entries.
-6. As a user, I want to view the full inventory so that I understand current stock levels.
-7. As a user, I want to view inventory by ID so that I can find specific items quickly.
-8. As a user, I want to view an inventory summary so that I can get an overview of stock categories
+1. As a System, I want to automatically update inventory when a bottling or order is added, changed, or deleted, so that real-time stock levels are maintained.
+2. As a User, I want to edit inventory items so that I can correct stock data.
+3. As an Admin, I want to delete inventory items so that I can clean up expired beer.
+4. As a user, I want to view the full inventory so that I understand current stock levels.
+5. As a user, I want to view inventory by ID so that I can check specific items.
+6. As a user, I want to view an inventory summary so that I can get an overview of stock by category.
+
+1. As a System, I want to automatically update inventory when bottling or orders are added, modified, or deleted so that stock levels remain accurate in real time.
+2. As a User, I want to edit inventory items so that I can correct stock data.
+3. As an Admin, I want to delete inventory items so that I can remove expired entries.
+4. As a User, I want to view the full inventory so that I can monitor current stock levels.
+5. As a User, I want to view inventory by ID so that I can locate specific stock items.
+6. As a User, I want to view an inventory summary so that I can get an overview by category.
 
 #### User Stories Brewing 
-1. As an Admin, I want to add new brewing protocols so that brewing processes are documented.
+1. As a User, I want to add new brewing protocols so that brewing processes are documented.
 2. As a User, I want to edit brewing protocols so that I can update brewing information.
-3. As an Admin, I want to delete brewing protocols so that I can remove outdated data.
+3. As an Admin, I want to delete brewing protocols so that I can remove incorrect data.
 4. As a User, I want to view brewing protocols so that I can understand the production process.
 5. As a User, I want to view brewing protocols by ID so that I can reference specific batches.
 
@@ -76,29 +82,24 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to view bottling records by ID so that I can look up specific batches.
 
 #### User Stories Customer 
-1. As an Admin, I want to add new customers so that I can manage client information.
+1. As a User, I want to add new customers so that I can manage client information.
 2. As a User, I want to edit customer data so that I can keep records accurate.
-3. As an Admin, I want to delete customers so that I can remove outdated contacts.
+3. As an Admin, I want to delete customers so that I can remove incorrect contacts.
 4. As a User, I want to view all customers so that I can see our client base.
 5. As a User, I want to view customers by ID so that I can quickly locate someone.
 
 #### User Stories Recipe 
-1. As an Admin, I want to add new recipes so that we can document brewing formulas.
-2. As a User, I want to edit recipes so that I can update brewing instructions.
-3. As an Admin, I want to delete recipes so that I can remove unused ones.
-4. As a User, I want to view all recipes so that I can follow brewing guidelines.
+1. As a User, I want to add new recipes so that I can document its category.
+2. As a User, I want to edit recipes so that I can update its category.
+3. As an Admin, I want to delete recipes so that I can remove incorrect ones.
+4. As a User, I want to view all recipes so that I get an overview of what is there.
 5. As a User, I want to view recipes by ID so that I can access specific details.
 
 #### User Stories Alert 
-1. As a System, I want to automatically add an alert when inventory is low so that admins are notified in time.
-2. As an Admin, I want to delete alerts so that I can manage and clear notifications.
+1. As a System, I want to automatically add an alert when inventory is low so that users are notified in time.
+2. As a User, I want to delete alerts so that I can clear notifications of categories no longer used.
 3. As a System, I want to automatically delete alerts when inventory is replenished so that only relevant alerts remain.
 
-#### User Stories Order
-1. As a User, I want to view all orders so that I can track submitted and processed orders.
-2. As a User, I want to add a new order so that I can record a customer’s purchase in the system.
-3. As a User, I want to edit existing orders so that I can update order details if necessary.
-4. As an Admin, I want to delete orders so that I can remove cancelled or invalid transactions.
 
 
 ### Use Case
