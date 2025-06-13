@@ -387,8 +387,6 @@ To run the Beer Brewing platform, both the backend service (Render) and the Budi
 Open the backend hosted on Render via the following URL:
 https://internet-technology-beer-brewing.onrender.com
 
-This may take up to 5 minutes to wake up from sleep mode.
-
 2. Open the Budibase Application
 
 In the Budibase environment for the class, open the app named Brugg 1_BeerBrewing via following URL:
