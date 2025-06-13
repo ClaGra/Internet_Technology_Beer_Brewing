@@ -3,6 +3,7 @@ package ch.fhnw.brew.business.service;
 import ch.fhnw.brew.data.domain.Alert;
 import ch.fhnw.brew.data.repository.AlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class AlertService {
         return alertRepository.findAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public void deleteAlert(Integer id) {
         alertRepository.deleteById(id);
