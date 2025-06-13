@@ -103,55 +103,55 @@ The Excel sheet does not give any insights about specific customers or their ord
 ![image](https://github.com/user-attachments/assets/44315eac-8888-4653-acae-cb5091f5952b)
  
 - UC-101 [Add Order]: The system shall allow the user to add new orders through a form. The order data will be stored and reflected in the order list view.
-- UC-102 [Edit Order]: The system shall allow the user to update existing orders. The user selects an order, modifies fields such as date, product quantity, or customer name, and confirms the changes.
+- UC-102 [Edit Order]: The system shall allow the user to update existing orders. The user selects an order, modifies fields such as customer, order date, beer name and update the changes.
 - UC-103 [Delete Order]: The system shall allow the admin to delete an order. This action permanently removes the record from the database after confirmation.
-- UC-104 [View Orders]: The system shall allow the user to view a list of all orders. Each record includes an order ID, date, and action buttons.
+- UC-104 [View Orders]: The system shall allow the user to view a list of all orders. Each record includes an order ID, customer, and order date.
+- UC-105 [View Orders by ID]: The system shall allow the user to view an order sorted by ID. The retrieved record includes the order ID, customer, and order date.
  
 #### Use Case 200 Inventory
 ![image](https://github.com/user-attachments/assets/d7fbe49f-c05f-4ee8-8ac3-f3807c7155e3)
  
 - UC-201 [Edit Inventory]: The system shall allow the user to edit existing inventory items. Additionally, the system shall automatically update inventory when bottling and orders are added, modified, or deleted. 
 - UC-202 [Delete Inventory]: The system shall allow the admin to delete inventory items. This action permanently removes the item from the inventory after confirmation.
-- UC-203 [View Inventory]: The system shall allow the user to view the inventory. The list displays item  names, quantities, batch number and expiration Date.
-- UC-204 [View Inventory by ID]: The system shall allow the user to view the inventory sorted by ID. The list displays item  names, quantities, batch number and expiration Date.
-- UC-205 [View Inventory Summary]: The system shall allow the user to view the inventory summary. The summary displays item names and total quantities.
+- UC-203 [View Inventory]: The system shall allow the user to view the inventory. The list displays inventory ID, anount, category name and expiration date.
+- UC-204 [View Inventory by ID]: The system shall allow the user to view the inventory sorted by ID. The list includes fields such as amount and expiration date.
+- UC-205 [View Inventory Summary]: The system shall allow the user to view the inventory summary. The summary displays beer names and amount.
  
 #### Use Case 300 Brewing
 ![image](https://github.com/user-attachments/assets/6127b51d-4d0c-43bd-b8c3-e0c0c40267f2)
  
-- UC-301 [Add Brewing Protocol]: The system shall allow the user to add a new brewing protocol. The user provides details such as recipe, brewing date, and process parameters.
-- UC-302 [Edit Brewing Protocol]: The system shall allow the user to edit an existing brewing protocol. The user can modify fields such as recipe, brewing date, and process parameters.
+- UC-301 [Add Brewing Protocol]: The system shall allow the user to add a new brewing protocol. The user provides details such as recipe name, brewing date, and original gravity.
+- UC-302 [Edit Brewing Protocol]: The system shall allow the user to edit an existing brewing protocol. The user can modify fields such as recipe name, brewing date, and original gravity.
 - UC-303 [Delete Brewing Protocol]: The system shall allow the admin to delete a brewing protocol. This action permanently removes the brewing protocol from the system after confirmation.
-- UC-304 [View Brewing Protocol]: The system shall allow the user to view brewing protocols. The list displays brewing dates, recipes, and process parameters.
-- UC-305 [View Brewing Protocol by ID]: The system shall allow the user to view brewing protocols sorted by ID. The list displays brewing dates, recipes, and process parameters.
+- UC-304 [View Brewing Protocol]: The system shall allow the user to view brewing protocols. The list displays batch number, brewing date, and recipe name.
+- UC-305 [View Brewing Protocol by ID]: The system shall allow the user to view brewing protocols sorted by ID. The list includes fields such as recipe name, brewing date, and original gravity. 
  
 #### Use Case 400 Bottling
 ![image](https://github.com/user-attachments/assets/a712c184-6219-4a0b-9f11-ebb8302a0eb8)
  
-- UC-401 [Add Bottling]: The system shall allow the user to add a new bottling record. The user provides details such as bottling date, expiration date, quantity, and batch number.
-- UC-402 [Edit Bottling]: The system shall allow thee user to edit an existing bottling record. The user can modify fields such as bottling date, expiration date, quantity, and batch number.
+- UC-401 [Add Bottling]: The system shall allow the user to add a new bottling record. The user provides details such as batch number, bottling date, amount.
+- UC-402 [Edit Bottling]: The system shall allow thee user to edit an existing bottling record. The user can modify fields such as such as batch number, bottling date, amount.
 - UC-403 [Delete Bottling]: The system shall allow the admin to delete a bottling record. This action permanently removes the record from the system after confirmation.
-- UC-404 [View Bottling]: The system shall allow the user to view bottling record. The list displays bottling dates, expiration date, quantities, and batch numbers.
-- UC-405 [View Bottling by ID]: The system shall allow the user to view bottling record sorted by ID. The list displays bottling dates, expiration date, quantities, and batch numbers.
+- UC-404 [View Bottling]: The system shall allow the user to view bottling record. The list displays fields such as brewing date, recipe name, and bottling date.
+- UC-405 [View Bottling by ID]: The system shall allow the user to view bottling record sorted by ID. The list displays bottling dates, expiration date, and amount.
  
 #### Use Case 500 Customer
 ![image](https://github.com/user-attachments/assets/83313a6c-a445-4b0c-ad12-8b92f0817cc6)
  
-- UC-501 [Add Customer]: The system shall allow the user to add a new customer. The user provides details such as customer name, contact information address, date of birth.
-- UC-502 [Edit Customer]: The system shall allow the user to edit an existing customer. The user can modify fields such as customer name, contact information address, date of birth.
+- UC-501 [Add Customer]: The system shall allow the user to add a new customer. The user provides details such as customer name, city, and date of birth.
+- UC-502 [Edit Customer]: The system shall allow the user to edit an existing customer. The user can modify fields such as customer name, city, and date of birth.
 - UC-503 [Delete Customer]: The system shall allow the admin to delete a customer. This action permanently removes the customer from the system after confirmation.
-- UC-504 [View Customer]: The system shall allow the user to view customer information. The list displays customer names, contact information address, date of birth.
-- UC-505 [View Customer by ID]: The system shall allow the user to view customer information sorted by ID. The list displays customer names, contact information address, date of birth.
+- UC-504 [View Customer]: The system shall allow the user to view customer information. The list displays customer name, city, and date of birth.
+- UC-505 [View Customer by ID]: The system shall allow the user to view customer information sorted by ID. The list displays details such as customer name, city, and date of birth.
  
 #### Use Case 600 Recipe
 ![image](https://github.com/user-attachments/assets/16f720fc-000a-4155-b753-057da7da24d2)
  
-- UC-601 [Add Recipe]: The system shall allow the user to add a new recipe category. The user provides details such as recipe name, recipe category, and recipe category label.
-- UC-602 [Edit Recipe]: The system shall allow the user to edit an existing recipe category. The user can modify fields such as recipe name, recipe category, and recipe category label.
+- UC-601 [Add Recipe]: The system shall allow the user to add a new recipe category. The user provides details such as name and category.
+- UC-602 [Edit Recipe]: The system shall allow the user to edit an existing recipe category. The user can modify fields such as  name and category.
 - UC-603 [Delete Recipe]: The system shall allow the admin to delete a recipe category. This action permanently removes the category from the system after confirmation.
-- UC-604 [View Recipe]: The system shall allow the user to view recipe category. The list displays recipe names, recipe category, and recipe category label.
-- UC-605 [View Recipe by ID]: The system shall allow the user to view recipe category sorted by ID. The list displays recipe names, recipe category, and recipe category label.
- 
+- UC-604 [View Recipe]: The system shall allow the user to view recipe category. The list displays recipe ID, recipe name and and recipe category.
+- UC-605 [View Recipe by ID]: The system shall allow the user to view recipe category sorted by ID. The list displays name and category.
 #### Use Case 700 Alert
 ![image](https://github.com/user-attachments/assets/47d7bc24-12e3-4104-ac45-6988f391c187)
  
