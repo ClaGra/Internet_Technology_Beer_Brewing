@@ -20,7 +20,7 @@ public class Bottling {
     private Integer amount;
     private Float finalGravity;
 
-    @ManyToOne
+    @OneToOne
     private BrewingProtocol brewingProtocol;
 
     // Getters and Setters
