@@ -42,7 +42,9 @@ public class OrderService {
                 .orElseThrow(() -> new NotFoundException("Customer not found"));
         order.setCustomer(customer);
 
-        // Check availability before deducting
+        // Check availability before deducting — collect all errors
+        List<String> stockErrors = new ArrayList<>();
+
         for (OrderItem item : order.getItems()) {
             int requested = item.getAmount();
             int totalAvailable = inventoryRepository.findByInventoryCategoryName(item.getBeerName()).stream()
@@ -50,10 +52,15 @@ public class OrderService {
                     .sum();
 
             if (totalAvailable < requested) {
-                throw new IllegalStateException("Not enough stock for " + item.getBeerName());
+                stockErrors.add("Not enough stock for " + item.getBeerName());
             }
         }
 
+        if (!stockErrors.isEmpty()) {
+            throw new IllegalStateException(String.join("; ", stockErrors));
+        }
+
+        // Inventory deduction and processing
         List<OrderItem> processedItems = new ArrayList<>();
 
         for (OrderItem item : order.getItems()) {
@@ -84,7 +91,7 @@ public class OrderService {
                 }
             }
 
-            // Trigger alert after each item is processed
+            // Trigger alert if remaining inventory falls below threshold
             int totalRemaining = inventoryRepository.findByInventoryCategoryName(item.getBeerName())
                     .stream()
                     .mapToInt(Inventory::getInventoryAmount)
@@ -113,9 +120,11 @@ public class OrderService {
             }
         }
 
+        // Set metadata and validate via addOrder
         updatedOrder.setOrderID(existing.getOrderID());
         updatedOrder.setOrderDate(existing.getOrderDate());
-        return addOrder(updatedOrder); // Triggers transactional addOrder again
+
+        return addOrder(updatedOrder);
     }
 
     @Transactional
@@ -124,6 +133,7 @@ public class OrderService {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
+        // Restore inventory before deletion
         for (OrderItem item : existing.getItems()) {
             List<Inventory> matching = inventoryRepository.findByBatchNr(item.getBatchNumber());
             for (Inventory inv : matching) {
