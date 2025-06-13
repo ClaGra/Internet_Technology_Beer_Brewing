@@ -36,29 +36,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorResponse(List.of(ex.getMessage())), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(List.of(ex.getMessage())), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException ex) {
         String[] split = ex.getMessage().split(";\\s*");
-        if (split.length > 1) {
-            return new ResponseEntity<>(new ErrorResponse(List.of(split)), HttpStatus.CONFLICT);
-        } else {
-            return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.CONFLICT);
-        }
+        return new ResponseEntity<>(new ErrorResponse(List.of(split)), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         logger.error("Unhandled exception occurred", ex);
         return new ResponseEntity<>(
-                new ErrorResponse("An unexpected error occurred. Please contact support."),
+                new ErrorResponse(List.of("An unexpected error occurred. Please contact support.")),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }

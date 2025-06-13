@@ -1,21 +1,15 @@
 package ch.fhnw.brew.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
-    private String message;
     private List<String> messages;
-
-    public ErrorResponse(String message) {
-        this.message = message;
-    }
 
     public ErrorResponse(List<String> messages) {
         this.messages = messages;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public List<String> getMessages() {
