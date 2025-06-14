@@ -29,8 +29,9 @@ public class Customer {
 
     private String street;
 
-    @Min(value = 1000, message = "Please enter a vilid zip code")
-    @Max(value = 9999, message = "Please enter a vilid zip code")
+    @NotNull(message = "Zip code is required")
+    @Min(value = 1000, message = "Please enter a valid zip code")
+    @Max(value = 9999, message = "Please enter a valid zip code")
     private Integer zipCode;
 
     private String city;
@@ -38,9 +39,10 @@ public class Customer {
     @Email(message = "Invalid email format")
     private String email;
 
-    @Pattern(regexp = "^(\\+41|0)[0-9]{9}$", message = "Phone must be a valid Swiss number")
+    @Pattern(regexp = "^$|^(\\+41|0)[0-9]{9}$", message = "Phone must be a valid Swiss number")
     private String phone;
 
+    @NotNull(message = "Gender is required")
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
