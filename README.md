@@ -60,7 +60,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 5. As a User, I want to view an inventory summary so that I can get an overview by category.
 6. As a User, I want to view inventory by ID so that I can check specific stock items.
  
-#### User Stories Brewing Protocols
+#### User Stories Brewing
 1. As a User, I want to add new brewing protocols so that brewing processes are documented.
 2. As a User, I want to edit brewing protocols so that I can update brewing information.
 3. As an Admin, I want to delete brewing protocols so that I can remove incorrect records.
