@@ -179,7 +179,7 @@ The image on the landing page supports the brand’s identity and creates a stro
 
 ## Layout & UX (User Experience)
 - Simple and consistent layout across all views supports an intuitive user flow
-- Sidebar-style top navigation offers quick access to main sections (e.g., Brewing, Bottling, Customers, Inventory)
+- Top navigation offers quick access to main sections (e.g., Brewing, Bottling, Customers, Inventory)
 - List/detail structure is applied:
 	- Detail/edit options via view, edit, delete icons
 - Highlights are used for:
