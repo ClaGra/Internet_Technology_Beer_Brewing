@@ -95,7 +95,7 @@ public class BrewingApplication {
 
         Recipe redAle = new Recipe();
         redAle.setRecipeName("Red Mountain Ale");
-        redAle.setRecipeCategory(RecipeCategory.STRONG_BEER);
+        redAle.setRecipeCategory(RecipeCategory.REGULAR_AND_SPECIALITY_BEER);
         redAle = recipeService.addRecipe(redAle);
 
         // === BREWING PROTOCOLS ===
