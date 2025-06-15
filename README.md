@@ -152,9 +152,9 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-603 [Delete Recipe]: The system shall allow the admin to delete a recipe category. This action permanently removes the category from the system after confirmation.
 - UC-604 [View Recipe]: The system shall allow the user to view recipe category. The list displays recipe ID, recipe name and and recipe category.
 - UC-605 [View Recipe by ID]: The system shall allow the user to view recipe category sorted by ID. The list displays name and category.
+  
 #### Use Case 700 Alert
 ![image](https://github.com/user-attachments/assets/47d7bc24-12e3-4104-ac45-6988f391c187)
- 
  
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72. The alert includes details such as the affected category and current inventory level.
 - UC-702 [View Alert]: The system shall allow the user to view all current alerts with related inventory details. The list displays the category and the current quantity.
