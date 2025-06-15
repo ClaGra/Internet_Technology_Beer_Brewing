@@ -204,7 +204,7 @@ The image on the landing page supports the brand’s identity and creates a stro
 ### Wireframe
 
 After logging in, users can navigate to different pages via the navigation page. Only the login page is publicly accessible.
-![image](https://github.com/user-attachments/assets/8dab50a3-d3c7-4fcf-8e5c-a33bd0c6ce2a)
+![image](https://github.com/user-attachments/assets/2d443322-5d49-460e-b56b-83fd0e51f24e)
 
 ### Mockup
 XXXX
