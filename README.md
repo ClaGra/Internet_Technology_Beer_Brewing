@@ -9,15 +9,26 @@
   - [User Stories](#user-stories)
   - [Use Case](#use-case)
 - [Design](#design)
-  - [Prototype Design](#prototype-design)
+  - [Color Scheme](#color-scheme)
+  - [Typography](#typography)
+  - [Graphics](#graphics)
+  - [Layout & UX (User Experience)](#layout--ux-user-experience)
+  - [Responsive & Accessible Design](#responsive--accessible-design)
+  - [Wireframe](#wireframe)
+  - [Mockup](#mockup)
+  - [Prototype](#prototype)
   - [Domain Design](#domain-design)
   - [Business Logic](#business-logic)
 - [Implementation](#implementation)
   - [Backend Technology](#backend-technology)
   - [Frontend Technology](#frontend-technology)
+  - [Execution](#execution)
+  - [Deployment to a PaaS](#deployment-to-a-paas)
 - [Project Management](#project-management)
   - [Roles](#roles)
   - [Milestones](#milestones)
+  - [Maintainer](#maintainer)
+  - [License](#license)
 
 ## Analysis 
 
@@ -177,7 +188,7 @@ A modern sans-serif font is used for both headers and body text to ensure clarit
 ### Graphics:
 The image on the landing page supports the brand’s identity and creates a strong visual connection to the brewing theme.
 
-## Layout & UX (User Experience)
+### Layout & UX (User Experience)
 - Simple and consistent layout across all views supports an intuitive user flow
 - Top navigation offers quick access to main sections (e.g. Brewing, Bottling, Customers, Inventory)
 - List/detail structure is applied:
@@ -186,7 +197,7 @@ The image on the landing page supports the brand’s identity and creates a stro
 	- Important system alerts (like deletion confirmation)
 - Action buttons (e.g., “View,” “Edit,” “Delete”) are grouped for clear workflows and use icon support where possible
 
-## Responsive & Accessible Design
+### Responsive & Accessible Design
 - Interactive elements are large enough for touch devices and designed with contrast for accessibility
 - Labels, forms, and dropdowns support efficient data input with reduced user error
   
@@ -195,25 +206,28 @@ The image on the landing page supports the brand’s identity and creates a stro
 After logging in, users can navigate to different pages via the navigation page. Only the login page is publicly accessible.
 ![image](https://github.com/user-attachments/assets/8dab50a3-d3c7-4fcf-8e5c-a33bd0c6ce2a)
 
-## Landing Page:
+### Mockup
+XXXX
+
+#### Landing Page:
 ![image](https://github.com/user-attachments/assets/319f9ffd-2c1d-4a3f-8350-2527f28bcb35)
 
-## Brewing and Bottling:
+#### Brewing and Bottling:
 ![image](https://github.com/user-attachments/assets/b29774cd-b88a-4695-8b99-8eecc00ff94d)
 ![image](https://github.com/user-attachments/assets/137b861a-4ea2-4e75-86c6-c52181f76d94)
 
-## Brewing Protocol:
+#### Brewing Protocol:
 ![image](https://github.com/user-attachments/assets/6df9ca2d-c625-4659-a9c6-e40bae0b60c6)
 ![image](https://github.com/user-attachments/assets/4fbba231-799c-4245-b29f-83231cee8805)
 ![image](https://github.com/user-attachments/assets/41fec6e1-b1c7-4bb0-831f-0268360ea265)
 
-## Customer overview
+#### Customer overview
 ![image](https://github.com/user-attachments/assets/86aeff53-199b-4ce0-b069-0a6a6e3bf01d)
 
-## Inventory Overview
+#### Inventory Overview
 ![image](https://github.com/user-attachments/assets/47c82f82-202d-4729-af1c-b43bba680e65)
 
-## Landing Page with stock warning
+#### Landing Page with stock warning
 ![image](https://github.com/user-attachments/assets/0104036d-4fed-4b14-be50-84a388ee8648)
 
 
@@ -225,8 +239,7 @@ The image shows an initial draft of the platform’s user interface created in B
 ### Domain Design
 This domain model illustrates the core structure of the brewing application using a UML class diagram. It defines key entities such as User, Customer, Order, BrewingProtocol, Bottling, Inventory, Recipe, and Alert, and visualizes their relationships, attributes, and operations to support brewing process management.
 
-![image](https://github.com/user-attachments/assets/488ea3de-2c68-4bca-8ffd-1cb54d8baf4b)
-
+![image](https://github.com/user-attachments/assets/e24f1719-d27c-433b-9b79-d13102f9e5dd)
 
 ### Business Logic 
 Our application follows four key business logic rules to ensure efficiency, legal compliance, and data integrity. First, automated inventory management updates stock levels in real-time based on events like bottling and orders, removing the need for manual tracking. Second, an alert system monitors inventory and triggers warnings when levels fall below a set threshold. Third, age verification checks are performed during order entry to ensure customers are at least 16 years old. Finally, deletion restrictions prevent critical data—like recipes or bottling records linked to brewing or orders—from being removed.
@@ -278,7 +291,7 @@ Bottling Deletion (DELETE /bottling):
 ## Implementation
 This web application is built with Spring Boot and uses an H2 in-memory database for data persistence during runtime. The backend is designed as a RESTful API and integrated into a Budibase frontend.
 
-### Backend Technology Stack
+### Backend Technology
 The backend uses the following technologies and libraries:
 
 - Spring Boot – Application framework
