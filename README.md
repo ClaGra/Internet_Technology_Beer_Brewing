@@ -251,7 +251,7 @@ Bottling (POST, PUT, DELETE /bottling):
 - When a bottling record is deleted, the corresponding quantities are removed from the inventory.
 
 ***2. Alert System***
-After each inventory change (POST, PUT, DELETE on /orders or PUT, DELETE on /bottling):
+After each inventory change (POST, PUT, DELETE /orders or PUT, DELETE /bottling):
 - The system automatically monitors inventory levels after any change caused by orders or bottling records. Exception: When a new bottling is added with amounts below the threshold, the system will not trigger an alert.
 	- If stock falls below 72 units, it checks whether an alert already exists. If not, a new alert is created for the product.
 	- If stock rises to 72 units or above, any existing alert for that product is automatically resolved.
