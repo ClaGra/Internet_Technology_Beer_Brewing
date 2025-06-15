@@ -194,7 +194,7 @@ The image on the landing page supports the brand’s identity and creates a stro
 - List/detail structure is applied:
 	- Detail/edit options via view, edit, delete icons
 - Highlights are used for:
-	- Important system alerts (like deletion confirmation)
+	- Important system alerts (e.g. deletion confirmation, invalid inputs)
 - Action buttons (e.g., “View,” “Edit,” “Delete”) are grouped for clear workflows and use icon support where possible
 
 ### Responsive & Accessible Design
@@ -207,21 +207,21 @@ After logging in, users can navigate to different pages via the navigation page.
 ![image](https://github.com/user-attachments/assets/2d443322-5d49-460e-b56b-83fd0e51f24e)
 
 ### Mockup
-XXXX
+The mockup illustrates the planned design and layout of the main user interface before implementation, serving as a visual reference for the development process.
 
-#### Landing Page:
+#### Landing Page
 ![image](https://github.com/user-attachments/assets/319f9ffd-2c1d-4a3f-8350-2527f28bcb35)
 
-#### Brewing and Bottling:
+#### Brewing and Bottling
 ![image](https://github.com/user-attachments/assets/b29774cd-b88a-4695-8b99-8eecc00ff94d)
 ![image](https://github.com/user-attachments/assets/137b861a-4ea2-4e75-86c6-c52181f76d94)
 
-#### Brewing Protocol:
+#### Brewing Protocol
 ![image](https://github.com/user-attachments/assets/6df9ca2d-c625-4659-a9c6-e40bae0b60c6)
 ![image](https://github.com/user-attachments/assets/4fbba231-799c-4245-b29f-83231cee8805)
 ![image](https://github.com/user-attachments/assets/41fec6e1-b1c7-4bb0-831f-0268360ea265)
 
-#### Customer overview
+#### Customer Overview
 ![image](https://github.com/user-attachments/assets/86aeff53-199b-4ce0-b069-0a6a6e3bf01d)
 
 #### Inventory Overview
