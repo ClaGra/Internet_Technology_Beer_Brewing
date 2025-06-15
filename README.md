@@ -154,7 +154,7 @@ The Excel sheet does not give any insights about specific customers or their ord
 - UC-605 [View Recipe by ID]: The system shall allow the user to view recipe category sorted by ID. The list displays name and category.
   
 #### Use Case 700 Alert
-![image](https://github.com/user-attachments/assets/47d7bc24-12e3-4104-ac45-6988f391c187)
+![image](https://github.com/user-attachments/assets/f379715d-1b28-4f7b-b01a-7a66ba943906)
  
 - UC-701 [Add Alert]: The system shall automatically add an alert when the inventory per category is below 72. The alert includes details such as the affected category and current inventory level.
 - UC-702 [View Alert]: The system shall allow the user to view all current alerts with related inventory details. The list displays the category and the current quantity.
