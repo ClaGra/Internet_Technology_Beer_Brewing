@@ -347,12 +347,12 @@ https://internet-technology-beer-brewing.onrender.com
 | -------------------- | ------------------------------------------- | ---------------------- | ------------------------ | ---------------------------------------------------- |
 | **Home**             | Welcome page, Display current system alerts | GET, DELETE            | `/alerts`                | `Alert`,`ErrorResponse`                     |
 | **Login**            | Authenticate users using form-based login   | GET, POST              | `/login`                 | `ErrorResponse`		      |
-| **Brewings**         | Create, edit, and delete brewins            | GET, POST, PUT, DELETE | `/brewing-protocols`     | `BrewingProtocol`, `Recipe`, `RecipeCategory`,`ErrorResponse`      |
-| **Recipes**          | Manage beer recipes and categories          | GET, POST, PUT, DELETE | `/recipes`               | `Recipe`, `RecipeCategory`,`ErrorResponse`  |
-| **Inventory**        | Monitor current stock and make adjustments  | GET, POST, PUT, DELETE | `/inventory`             | `Inventory`, `Bottling`, `BrewingProtocol`,`ErrorResponse`         |
-| **Bottling**         | Register new batches and edit bottling data | GET, POST, PUT, DELETE | `/bottling`              | `Bottling`, `BrewingProtocol`, `Recipe`, `RecipeCategory`,`ErrorResponse`  |
-| **Orders**           | Place and view customer orders              | GET, POST, PUT, DELETE | `/orders`                | `Order`, `OrderItem`, `Customer`, `Inventory`,`ErrorResponse`        |
-| **Customers**        | Manage customer profiles and data           | GET, POST, PUT, DELETE | `/customers`             | `Customer`, `Gender`,`ErrorResponse`                  |
+| **Brewings**         | Manage brewings            | GET, POST, PUT, DELETE | `/protocols`     | `BrewingProtocol`, `Recipe`, `RecipeCategory`,`ErrorResponse`      |
+| **Recipes**          | Manage beer recipes    | GET, POST, PUT, DELETE | `/recipes`               | `Recipe`, `RecipeCategory`,`ErrorResponse`  |
+| **Inventory**        | Monitor & Manage current stock  | GET, PUT, DELETE | `/inventory`             | `Inventory`, `Bottling`, `BrewingProtocol`,`ErrorResponse`         |
+| **Bottlings**         | Manage bottling data | GET, POST, PUT, DELETE | `/bottlings`              | `Bottling`, `BrewingProtocol`, `Recipe`, `RecipeCategory`,`ErrorResponse`  |
+| **Orders**           | Manage customer orders              | GET, POST, PUT, DELETE | `/orders`                | `Order`, `OrderItem`, `Customer`, `Inventory`,`ErrorResponse`        |
+| **Customers**        | Manage customer data           | GET, POST, PUT, DELETE | `/customers`             | `Customer`, `Gender`,`ErrorResponse`                  |
 | **Log-out**          | Confirm log out intention    |                    |               |                    |
 
 
