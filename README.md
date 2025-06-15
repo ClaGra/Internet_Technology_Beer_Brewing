@@ -240,28 +240,24 @@ The full API documentation is available via Swagger at: [Swagger UI Documentatio
 ***1. Automated Inventory Management***
 The inventory system automatically updates stock levels based on customer and bottling activities:
 
-Orders (POST, PUT, DEL /api/orders):
-- When an order is placed or updated, the system verifies if enough stock is available for all ordered products.
-- If stock is sufficient, the ordered amounts are deducted from inventory.
-- If stock is insufficient, the order is rejected.
-- When an order is deleted, the previously reserved stock is returned to inventory.
+Orders (POST, PUT, DELETE /orders):
+- When an order is added, the system checks if enough stock is available for each item. If so, the corresponding quantities are deducted from the inventory; otherwise, the order is rejected.
+- When an order is updated, inventory levels are adjusted up or down based on the difference between the previous and new quantities.
+- When an order is deleted, the previously deducted quantities are restored to the inventory.
 
-Bottling (POST, PUT, DEL /api/bottling):
-- When production is recorded or updated, the produced amounts are adjusted in the inventory.
-- When a production record is deleted, the corresponding stock is reduced.
+Bottling (POST, PUT, DELETE /bottling):
+- When a bottling record is added, the produced quantities are added to the inventory.
+- When a bottling record is updated, inventory levels are adjusted up or down depending on the change in produced quantity or product.
+- When a bottling record is deleted, the corresponding quantities are removed from the inventory.
 
-***2. Alert Syetem***
-
-After each inventory change (POST, PUT, DEL on /api/orders or /api/bottling):
-- The system evaluates the stock level of the affected product.
-- If stock falls below 72, the system:
-	- Checks if an alert already exists.
-	- If not, creates a new alert for that product.
-- If stock rises to 72 units or above
-	- Any existing alert is resolved.
+***2. Alert System***
+After each inventory change (POST, PUT, DELETE on /orders or PUT, DELETE on /bottling):
+- The system automatically monitors inventory levels after any change caused by orders or bottling records. Exception: When a new bottling is added with amounts below the threshold, the system will not trigger an alert.
+	- If stock falls below 72 units, it checks whether an alert already exists. If not, a new alert is created for the product.
+	- If stock rises to 72 units or above, any existing alert for that product is automatically resolved.
 
 ***3. Age Verification***
-During customer creationg and adjusting (POST, PUT /api/customers):
+During customer creationg and adjusting (POST, PUT /customers):
 - When customer data is created or adjusted, the system checks the provided birthdate.
 - If the customer is younger than 16, the request is rejected with an error.
 - If the customer is 16 or older, the customer data is saved successfully.
@@ -269,25 +265,15 @@ During customer creationg and adjusting (POST, PUT /api/customers):
 ***4. Security / Deletion Rules***
 The system enforces multiple business rules to ensure data consistency, such as:
 
-Recipe Deletion (DELETE /api/recipes):
+Recipe Deletion (DELETE /recipes):
 - When a delete request is received, the system checks if the recipe is referenced by any brewing protocol.
 - If referenced, deletion is blocked and an error is returned.
 - If not referenced, the recipe is deleted.
 
-Bottling Deletion (DELETE /api/bottling):
+Bottling Deletion (DELETE /bottling):
 - When a delete request is received, the system checks if the bottling record is linked to any customer orders.
 - If linked, deletion is blocked and an error is returned.
 - If not linked, the bottling record is deleted.
-
-
-| Action          | HTTP Method | Endpoint            | Triggered Logic                                                 |
-| --------------- | ----------- | ------------------- | --------------------------------------------------------------- |
-| Place Order     | POST        | `/api/orders`       | Reduce inventory, check stock levels                            |
-| Finish Bottling | POST        | `/api/bottling`     | Increase inventory, resolve alert if stock ≥72                  |
-| View Alerts     | GET         | `/api/alerts`       | Display all active low-stock alerts                             |
-| Create Customer | POST        | `/api/customers`    | Check if customer is at least 16 years old                      |
-| Delete Recipe   | DELETE      | `/api/recipes/:id`  | Block if recipe is used in a brewing protocol                   |
-| Delete Bottling | DELETE      | `/api/bottling/:id` | Block if bottling is referenced by an order                     |
 
 
 ## Implementation
@@ -356,27 +342,29 @@ This web application was developed using Budibase, a low-code platform for inter
 
 The application is available for preview at:
 https://internet-technology-beer-brewing.onrender.com
+
 | View                 | Purpose                                     | HTTP Methods Used      | API Endpoint(s)          | Entity/Entities Involved   |
-| -------------------- | ------------------------------------------- | ---------------------- | ------------------------ | -------------------------- |
-| **Home**             | Display current system alerts               | GET                    | `/api/alerts`            | `Alert`                    |
-| **Login**            | Authenticate users using form-based login   | GET                    | `/login`                 | `User` (in-memory only)    |
-| **Brewing Protocol** | Create, edit, and delete brewing procedures | GET, POST, PUT, DELETE | `/api/brewing-protocols` | `BrewingProtocol`          |
-| **Recipes**          | Manage beer recipes and categories          | GET, POST, PUT, DELETE | `/api/recipes`           | `Recipe`, `RecipeCategory` |
-| **Inventory**        | Monitor current stock and make adjustments  | GET, PUT               | `/api/inventory`         | `Inventory`                |
-| **Bottling**         | Register new batches and edit bottling data | POST, PUT              | `/api/bottling`          | `Bottling`                 |
-| **Orders**           | Place and view customer orders              | GET, POST              | `/api/orders`            | `Order`, `OrderItem`       |
-| **Customers**        | Manage customer profiles and data           | GET, POST              | `/api/customers`         | `Customer`                 |
-| **Alerts**           | View currently active low-stock alerts      | GET                    | `/api/alerts`            | `Alert`                    |
+| -------------------- | ------------------------------------------- | ---------------------- | ------------------------ | ---------------------------------------------------- |
+| **Home**             | Welcome page, Display current system alerts | GET, DELETE            | `/alerts`                | `Alert`,`ErrorResponse`                     |
+| **Login**            | Authenticate users using form-based login   | GET, POST              | `/login`                 | `ErrorResponse`		      |
+| **Brewings**         | Create, edit, and delete brewins            | GET, POST, PUT, DELETE | `/brewing-protocols`     | `BrewingProtocol`, `Recipe`, `RecipeCategory`,`ErrorResponse`      |
+| **Recipes**          | Manage beer recipes and categories          | GET, POST, PUT, DELETE | `/recipes`               | `Recipe`, `RecipeCategory`,`ErrorResponse`  |
+| **Inventory**        | Monitor current stock and make adjustments  | GET, POST, PUT, DELETE | `/inventory`             | `Inventory`, `Bottling`, `BrewingProtocol`,`ErrorResponse`         |
+| **Bottling**         | Register new batches and edit bottling data | GET, POST, PUT, DELETE | `/bottling`              | `Bottling`, `BrewingProtocol`, `Recipe`, `RecipeCategory`,`ErrorResponse`  |
+| **Orders**           | Place and view customer orders              | GET, POST, PUT, DELETE | `/orders`                | `Order`, `OrderItem`, `Customer`, `Inventory`,`ErrorResponse`        |
+| **Customers**        | Manage customer profiles and data           | GET, POST, PUT, DELETE | `/customers`             | `Customer`, `Gender`,`ErrorResponse`                  |
+| **Log-out**          | Confirm log out intention    |                    |               |                    |
 
 
 ### Constraints in Budibase
 As discussed, here is a summary of the identified constraints and issues encountered on the frontend:
-- Button Display: Only 3 out of 4 (or 5) buttons were displayed. (Resolved by applying a different approach.)
-- Order Functionality: The ordering process does not work as intended.
-- Loading Behavior: On second click, certain fields automatically pre-fill (e.g. in Bottling or Brewing Protocol forms).
-- Dropdown Filtering for Bottling: When adding a new bottling entry, only batches without existing bottling records should appear. A constraint was planned to filter the dropdown accordingly.
+- Button Display: In a table Budibase can only display a maximum of 3 buttons. (Resolved by applying a different approach.)
+- Order Functionality: The ordering process does not work as intended. Budibase struggled with saving the items in an array and the repeater block did not display the added order items as intended.
+- Loading Behavior: In forms like Bottling or Brewing Protocol, selecting an option from a dropdown (e.g., batch number or recipe) only updates related fields (such as recipe name and category) after a second interaction. Some fields may auto-fill, but not consistently on the first selection.
+- Dropdown Filtering for Bottling: When adding a new bottling entry, only batches without existing bottling records should appear. A constraint was planned to filter the dropdown accordingly, which Budibase did not allow for.
+- Brewing Protocol: The initial plan was to save and display both the brewing and bottling data together within the Brewing Protocol, as outlined in the mock-up and shown in the image below. However, since brewings and bottlings reference each other, this approach caused circular dependencies. As a result, we decided to separate them and display each one individually.
 
-![Bild1](https://github.com/user-attachments/assets/c7f6f160-208a-4b07-b33a-ddbb653989dd)
+<img width="470" alt="New Brewing" src="https://github.com/user-attachments/assets/b4bf3146-2ade-4dc0-b3a1-b86dd3a4bc95" />
 
  
 ## Execution
@@ -411,32 +399,23 @@ To make the application accessible online without needing to restart a local ser
 The project of the web application for the Brauverein Full was developed collaboratively by a team of four. Roles and responsibilities were  divided, and the team coordinated progress through regular meetings and shared documentation.
 
 ### Roles
-- **Back-end developer: Claudia Graf (Leader), Soheyla Tofighi, Tuangporn Siwaboon, Yannik Stöckli** 
-
-They implemented the backend logic using Spring Boot. They defined the core entities (e.g., BrewingProtocol, Recipe, Inventory, User) and developed RESTful endpoints to support the platform’s functionalities, such as managing brewing steps, orders, and alerts.
-
+- **Back-end developer: Claudia Graf (Leader), Soheyla Tofighi, Tuangporn Siwaboon, Yannik Stöckli**
+ 
+  Implementation of the backend using Spring Boot. Definition of core entities in the domain layer. Handling of database operations through repositories using Spring Data JPA. Encapsulation of business logic in the service layer for an error free user workflow. Exposure of RESTful endpoints in the controller layer to support operations such as managing brewings, bottlings, orders, and alerts. Integration of global exception handling to ensure stability and a smooth user experience.
+ 
 - **Front-end developer: Soheyla Tofighi (Leader), Claudia Graf, Tuangporn Siwaboon, Yannik Stöckli**
-
-They built the user interface using Budibase. They designed and connected frontend views to the backend services, enabling intuitive interaction with the system for different user roles.
-
-- **Documentation, Presentation & Project Coordinator: Tuangporn Siwaboon (Leader), Yannik Stöckli, Claudia Graf, Soheyla Tofighi**
-
-They coordinated team meetings and responsibilities, ensured timely progress, and created the documentation (e.g., user stories, use cases, and this README). They also prepared and delivered the final presentation.
-
+ 
+  Building of the user interface using Budibase. Design and connection of frontend views to the backend services, enabling intuitive interaction with the system for different user roles.
+ 
+- **Documentation & Project Coordinator: Tuangporn Siwaboon (Leader), Yannik Stöckli, Claudia Graf, Soheyla Tofighi**
+ 
+  Coordination of team meetings and responsibilities, ensuring timely progress, and creation of the documentation (e.g., user stories, use cases, and this README).
 - **Testing: Yannik Stöckli (Leader), Claudia Graf, Soheyla Tofighi, Tuangporn Siwaboon**
-
-The entire team contributed to testing by checking functionalities across the frontend and backend, verifying correct API behavior, UI consistency, and ensuring that all use cases were properly supported.
-
-
-### Task Overview
-
-| Task Area            | Responsible Person(s)             | Notes                                       |
-|----------------------|-----------------------------------|---------------------------------------------|
-| Backend endpoints     | Claudia, Soheyla                   | Defined core entities and logic             |
-| Frontend (UI)         | Soheyla, Claudia                   | Budibase implementation and testing         |
-| Documentation         | Yannik, Tuangporn                  | Use cases, user stories, README             |
-| Presentation slides   | Tuangporn, Yannik                  | Structure, content, and delivery            |
-| Manual Testing        | Everyone                           | Testing features during and after development |
+ 
+  Testing the functionalities across the frontend and backend, verifying correct API behavior, UI consistency, and ensuring that all use cases were properly supported.
+- **Presentation: Claudia Graf, Soheyla Tofighi, Tuangporn Siwaboon, Yannik Stöckli**
+ 
+  Preparation of the presentation, including outlining the user workflow to show and highlights of the business logic to mention. Delivering and uploading presentation.
 
 
 ### Milestones
